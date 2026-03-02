@@ -431,219 +431,158 @@ body::before{
 
 </div>
 <script>
+/* ======================================
+   CONFIGURACIÓN GENERAL
+   Aquí defines:
+   - URL del Google Apps Script
+   - Número de WhatsApp destino
+   - Fecha y hora exacta de la boda
+====================================== */
+const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec";
+const NUMERO_WHATSAPP="5217716995004";
+const fechaBoda=new Date("2026-03-28T11:00:00").getTime();
+let envioRealizado=false;
 
-/* =====================================
-   CONFIGURACIÓN
-===================================== */
-
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec"; // ← URL REAL
-const NUMERO_WHATSAPP = "5217716995004"; // ← TU NÚMERO REAL
-
-const fechaBoda = new Date("March 28, 2026 11:00:00").getTime();
-
-let envioRealizado = false;
-
-/* =====================================
-   PARÁMETROS URL
-===================================== */
-
-function obtenerParametro(nombre) {
-  const params = new URLSearchParams(window.location.search);
-  return params.get(nombre);
+/* ======================================
+   OBTENER PARÁMETROS DE LA URL
+   Lee ?familia= y ?nombres=
+====================================== */
+function obtenerParametro(nombre){
+ const params=new URLSearchParams(window.location.search);
+ return params.get(nombre);
 }
+const familia=obtenerParametro("familia")||"Familia Invitada";
+const nombres=obtenerParametro("nombres")||"Javi & Irli";
+document.getElementById("familiaInvitada").innerText=familia;
+document.getElementById("nombresInvitados").innerText=nombres;
 
-const familia = obtenerParametro("familia") || "Familia Invitada";
-const nombres = obtenerParametro("nombres") || "Javi & Irli";
-
-document.getElementById("familiaInvitada").innerText = familia;
-document.getElementById("nombresInvitados").innerText = nombres;
-
-/* =====================================
-   INICIALES EN SELLO
-===================================== */
-
-const seal = document.getElementById("seal");
-
-function obtenerIniciales(texto) {
-  return texto
-    .split("&")[0]
-    .trim()
-    .split(" ")
-    .map(p => p[0])
-    .join("")
-    .toUpperCase();
+/* ======================================
+   GENERAR INICIALES EN EL SELLO
+====================================== */
+const seal=document.getElementById("seal");
+function obtenerIniciales(texto){
+ return texto.split("&")[0].trim().split(" ").map(p=>p[0]).join("").toUpperCase();
 }
+seal.innerHTML=`<span style="color:white;font-size:26px;font-family:'Great Vibes',cursive;">${obtenerIniciales(nombres)}</span>`;
 
-seal.innerHTML = `
-  <span style="
-    color:white;
-    font-size:26px;
-    font-family:'Great Vibes', cursive;
-  ">
-    ${obtenerIniciales(nombres)}
-  </span>
-`;
+/* ======================================
+   APERTURA DEL SOBRE
+   Muestra contenido principal
+====================================== */
+const envelope=document.getElementById("envelope");
+const mainContent=document.getElementById("mainContent");
+const introText=document.getElementById("introText");
+const envelopeWrapper=document.getElementById("envelopeWrapper");
+const bgMusic=document.getElementById("bgMusic");
 
-/* =====================================
-   APERTURA SOBRE
-===================================== */
-
-const envelope = document.getElementById("envelope");
-const mainContent = document.getElementById("mainContent");
-const introText = document.getElementById("introText");
-const envelopeWrapper = document.getElementById("envelopeWrapper");
-const bgMusic = document.getElementById("bgMusic");
-
-envelope.addEventListener("click", () => {
-
-  seal.classList.add("break");
-
-  introText.style.display = "none";
-  envelopeWrapper.style.display = "none";
-
-  mainContent.classList.add("show");
-
-  window.scrollTo(0,0);
-
-  iniciarMusica();
-  iniciarLluviaMonedas();
+envelope.addEventListener("click",()=>{
+ seal.classList.add("break");
+ introText.style.display="none";
+ envelopeWrapper.style.display="none";
+ mainContent.classList.add("show");
+ window.scrollTo(0,0);
+ iniciarMusica();
+ iniciarLluviaMonedas();
 });
 
-/* =====================================
-   MÚSICA (AHORA SÍ FUNCIONA)
-===================================== */
-
-function iniciarMusica() {
-  bgMusic.volume = 0;
-  bgMusic.play().then(() => {
-
-    let vol = 0;
-    const fade = setInterval(() => {
-      if (vol < 0.6) {
-        vol += 0.03;
-        bgMusic.volume = vol;
-      } else {
-        clearInterval(fade);
-      }
-    }, 200);
-
-  }).catch(e => {
-    console.log("Audio bloqueado:", e);
-  });
+/* ======================================
+   MÚSICA CON PROTECCIÓN ANTI ERROR
+====================================== */
+function iniciarMusica(){
+ try{
+  bgMusic.volume=0;
+  bgMusic.loop=true;
+  bgMusic.play().catch(()=>{});
+  let vol=0;
+  const fade=setInterval(()=>{
+   if(vol<0.6){
+    vol+=0.03;
+    bgMusic.volume=vol;
+   }else clearInterval(fade);
+  },200);
+ }catch(e){
+  console.log("Audio bloqueado pero no rompe:",e);
+ }
 }
 
-/* =====================================
-   LLUVIA MONEDAS
-===================================== */
-
-function crearMoneda() {
-  const coin = document.createElement("div");
-  coin.classList.add("coin");
-  coin.style.left = Math.random() * 100 + "vw";
-  coin.style.animationDuration = (8 + Math.random()*6) + "s";
-  document.body.appendChild(coin);
-
-  setTimeout(()=> coin.remove(), 15000);
+/* ======================================
+   LLUVIA DE MONEDAS
+====================================== */
+function crearMoneda(){
+ const coin=document.createElement("div");
+ coin.classList.add("coin");
+ coin.style.left=Math.random()*100+"vw";
+ coin.style.animationDuration=(8+Math.random()*6)+"s";
+ document.body.appendChild(coin);
+ setTimeout(()=>coin.remove(),15000);
 }
-
 function iniciarLluviaMonedas(){
-  setInterval(crearMoneda, 800);
+ setInterval(crearMoneda,800);
 }
 
-/* =====================================
-   CUENTA REGRESIVA
-===================================== */
-
-const countdownEl = document.getElementById("countdown");
-
-setInterval(() => {
-
-  const ahora = new Date().getTime();
-  const distancia = fechaBoda - ahora;
-
-  if (distancia <= 0) {
-    countdownEl.innerHTML = "¡Hoy es el gran día!";
-    return;
-  }
-
-  const dias = Math.floor(distancia / (1000*60*60*24));
-  const horas = Math.floor((distancia % (1000*60*60*24)) / (1000*60*60));
-  const minutos = Math.floor((distancia % (1000*60*60)) / (1000*60));
-  const segundos = Math.floor((distancia % (1000*60)) / 1000);
-
-  countdownEl.innerHTML =
-    `${dias} días ${horas} hrs ${minutos} min ${segundos} seg`;
-
+/* ======================================
+   CUENTA REGRESIVA DINÁMICA
+====================================== */
+const countdownEl=document.getElementById("countdown");
+setInterval(()=>{
+ const ahora=new Date().getTime();
+ const distancia=fechaBoda-ahora;
+ if(distancia<=0){
+  countdownEl.innerHTML="¡Hoy es el gran día!";
+  return;
+ }
+ const dias=Math.floor(distancia/(1000*60*60*24));
+ const horas=Math.floor((distancia%(1000*60*60*24))/(1000*60*60));
+ const minutos=Math.floor((distancia%(1000*60*60))/(1000*60));
+ const segundos=Math.floor((distancia%(1000*60))/1000);
+ countdownEl.innerHTML=`${dias} días ${horas} hrs ${minutos} min ${segundos} seg`;
 },1000);
 
-/* =====================================
-   MAPA
-===================================== */
-
+/* ======================================
+   BOTÓN UBICACIÓN
+====================================== */
 function abrirMapa(){
-  window.open(
-   "https://www.google.com/maps/search/?api=1&query=Tlalnepantla+Valle+Dorado+Plaza+City+Shops+Registro+Civil",
-   "_blank"
-  );
+ window.open("https://www.google.com/maps/search/?api=1&query=Tlalnepantla+Valle+Dorado+Plaza+City+Shops+Registro+Civil","_blank");
 }
 
-/* =====================================
+/* ======================================
    CONFIRMAR ASISTENCIA
-===================================== */
-
+   - Envía datos a Google Sheets
+   - Redirige a WhatsApp con mensaje
+====================================== */
 async function confirmarAsistencia(){
-
-  if(envioRealizado){
-    alert("Ya registramos tu confirmación ❤️");
-    return;
-  }
-
-  const telefono = document.getElementById("telefono").value.trim();
-
-  if(!telefono){
-    alert("Ingresa tu número por favor");
-    return;
-  }
-
-  envioRealizado = true;
-
-  /* ---------- GOOGLE SHEETS ---------- */
-
-  try {
-
-    const response = await fetch(GOOGLE_SCRIPT_URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        telefono:telefono,
-        confirmacion:"Confirmado",
-        familia:familia
-      })
-    });
-
-    console.log("Enviado a Sheets");
-
-  } catch(error){
-    console.error("Error Sheets:", error);
-  }
-
-  /* ---------- WHATSAPP ---------- */
-
-  const mensaje =
-   `Hola, confirmo mi asistencia.\nFamilia: ${familia}\nTeléfono: ${telefono}`;
-
-  const url =
-   `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
-
-  window.open(url,"_blank");
+ if(envioRealizado){
+  alert("Ya registramos tu confirmación ❤️");
+  return;
+ }
+ const telefono=document.getElementById("telefono").value.trim();
+ if(!telefono){
+  alert("Ingresa tu número por favor");
+  return;
+ }
+ envioRealizado=true;
+ try{
+  await fetch(GOOGLE_SCRIPT_URL,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+    telefono:telefono,
+    confirmacion:"Confirmado",
+    familia:familia
+   })
+  });
+ }catch(error){
+  console.error("Error Sheets:",error);
+ }
+ const mensaje=`Hola, confirmo mi asistencia.\nFamilia: ${familia}\nTeléfono: ${telefono}`;
+ const url=`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+ window.location.href=url;
 }
-
 </script>
 
 </body>
 </html>
+
 
 
 
