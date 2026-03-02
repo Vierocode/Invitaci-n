@@ -7,14 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
-
 /* ===============================
    VARIABLES
 =================================*/
 :root{
   --dorado:#C6A85B;
   --dorado-suave:#E7D49A;
-  --dorado-brillo:#F5E6B3;
+  --rosa:#f4c2d7;
   --fondo-oscuro:rgba(0,0,0,0.55);
   --card-bg:rgba(0,0,0,0.55);
 }
@@ -33,11 +32,12 @@ body{
   color:var(--dorado);
   text-align:center;
   overflow-x:hidden;
+
   background: url("fondo.png") no-repeat center center fixed;
   background-size:cover;
 }
 
-/* Overlay elegante */
+/* Capa oscura elegante */
 body::before{
   content:"";
   position:fixed;
@@ -47,15 +47,16 @@ body::before{
 }
 
 /* ===============================
-   INTRO
+   INTRO SUPERIOR
 =================================*/
 
 .intro-text{
+  text-align:center;
   padding:60px 20px 20px;
   font-size:30px;
   line-height:1.4;
   font-weight:500;
-  text-shadow:0 2px 12px rgba(0,0,0,.7);
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
 }
 
 .intro-text .familia{
@@ -90,10 +91,41 @@ body::before{
   border-radius:4px;
 }
 
+.envelope::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:0;
+  height:0;
+  border-left:140px solid transparent;
+  border-right:140px solid transparent;
+  border-top:90px solid #e6e6e6;
+  border-radius:4px 4px 0 0;
+}
+
 .envelope:hover{
   transform:translateY(-5px);
 }
 
+.envelope.open{
+  transform:scale(1.1);
+}
+
+/* Monograma */
+.envelope::after{
+  content:"J & I";
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-family:'Great Vibes', cursive;
+  font-size:42px;
+  color:rgba(0,0,0,0.5);
+  pointer-events:none;
+}
+
+/* Sello */
 .seal{
   width:75px;
   height:75px;
@@ -102,7 +134,8 @@ body::before{
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  background:radial-gradient(circle at 30% 30%, #a06b1e, #6e4610 70%);
+  background:
+    radial-gradient(circle at 30% 30%, #a06b1e, #6e4610 70%);
   box-shadow:
     inset 0 4px 6px rgba(255,255,255,.2),
     inset 0 -4px 6px rgba(0,0,0,.6),
@@ -116,30 +149,23 @@ body::before{
 }
 
 /* ===============================
-   LLUVIA DE MONEDAS
+   CONFETTI DORADO (ANTES PÉTALOS)
 =================================*/
 
-.coin{
+.petal{
   position:fixed;
-  top:-40px;
-  width:14px;
-  height:14px;
+  top:-20px;
+  width:12px;
+  height:12px;
+  background:linear-gradient(145deg,var(--dorado),var(--dorado-suave));
   border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, var(--dorado-brillo), var(--dorado) 60%, #8f6f2d 90%);
-  box-shadow:
-    inset 0 0 6px rgba(255,255,255,.6),
-    0 0 8px rgba(198,168,91,.6);
+  opacity:.9;
   pointer-events:none;
-  opacity:.85;
-  animation:coinFall linear forwards;
+  animation:fall linear forwards;
 }
 
-@keyframes coinFall{
-  0%{
-    transform:translateY(0) rotate(0deg);
-    opacity:.9;
-  }
-  100%{
+@keyframes fall{
+  to{
     transform:translateY(110vh) rotate(720deg);
     opacity:0;
   }
@@ -152,7 +178,7 @@ body::before{
 .main-content{
   display:none;
   opacity:0;
-  transition:opacity 1.5s ease;
+  transition:opacity 1.2s ease;
   padding-top:40px;
 }
 
@@ -173,31 +199,47 @@ body::before{
 }
 
 /* ===============================
-   VIDEO CINEMATOGRÁFICO
+   VIDEO (AHORA SIEMPRE ARRIBA)
 =================================*/
 
 .video-container{
   width:100%;
-  max-width:950px;
+  max-width:900px;
   margin:0 auto 40px;
   padding:15px;
   border:2px solid var(--dorado);
   border-radius:25px;
+  box-shadow:0 0 40px rgba(198,168,91,.4);
   background:var(--card-bg);
-  box-shadow:0 0 60px rgba(198,168,91,.4);
-  opacity:0;
-  transform:translateY(20px);
-  transition:all 1.5s ease;
-}
-
-.video-container.show{
-  opacity:1;
-  transform:translateY(0);
 }
 
 .video-container video{
   width:100%;
   border-radius:18px;
+}
+
+/* ===============================
+   SCROLL INDICATOR
+=================================*/
+
+.scroll-hint{
+  opacity:0;
+  margin:20px auto 0;
+  font-size:22px;
+  text-align:center;
+  display:block;
+  width:100%;
+  animation:bounce 2s infinite;
+  transition:opacity .6s ease;
+}
+
+.scroll-hint.show{
+  opacity:1;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(12px);}
 }
 
 /* ===============================
@@ -226,7 +268,9 @@ body::before{
 .section-card h2{
   font-family:'Great Vibes', cursive;
   font-size:36px;
+  font-weight:400;
   margin-bottom:25px;
+  letter-spacing:1px;
 }
 
 .section-card p,
@@ -254,15 +298,42 @@ body::before{
 }
 
 .btn-shiny:hover{
-  transform:scale(1.07);
+  transform:scale(1.05);
+}
+
+.btn-shiny::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.6),transparent);
+  animation:shine 3s infinite;
+}
+
+@keyframes shine{
+  0%{left:-100%;}
+  50%{left:100%;}
+  100%{left:100%;}
 }
 
 /* ===============================
-   DRESS SWITCH
+   COUNTDOWN
+=================================*/
+
+.countdown{
+  font-size:22px;
+  letter-spacing:1px;
+}
+
+/* ===============================
+   DRESS CODE
 =================================*/
 
 .dress-wrapper{
   position:relative;
+  text-align:center;
 }
 
 .dress-switch{
@@ -315,7 +386,14 @@ body::before{
 
 .intro-text{
   padding:80px 20px 30px;
-  font-size:32px;
+  font-size:34px;
+  line-height:1.6;
+}
+
+.intro-text .familia{
+  margin-top:20px;
+  font-size:24px;
+  letter-spacing:2px;
 }
 
 .section-card{
@@ -327,107 +405,149 @@ body::before{
 }
 
 }
-
 </style>
 </head>
 <body>
 
-<!-- AUDIO DE FONDO -->
-<audio id="bgMusic" preload="auto" loop>
-  <source src="Intro.m4a" type="audio/mpeg">
+<!-- =========================
+     AUDIO
+========================= -->
+<audio id="bgMusic" loop>
+  <source src="Intro.m4a" type="audio/mp4">
 </audio>
 
-<!-- INTRO -->
-<div class="intro-text" id="introText">
-  <div id="nombresInvitados">Javi & Irli</div>
-  <div class="familia" id="familiaInvitada"></div>
-</div>
 
-<!-- SOBRE -->
-<div class="envelope-wrapper" id="envelopeWrapper">
-  <div class="envelope" id="envelope">
-    <div class="seal" id="seal"></div>
+<!-- =========================
+     INTRO PERSONALIZABLE
+========================= -->
+<div class="intro-text">
+
+  <div id="mainNames">
+    Con amor Javi & Irli <br>
+    los invitamos a nuestra boda
   </div>
+
+  <div class="familia" id="familyName">
+    Familia Salas Ponce
+  </div>
+
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
+
+<!-- =========================
+     SOBRE
+========================= -->
+<div class="envelope-wrapper">
+
+  <div class="envelope" id="envelope">
+
+    <!-- SELLO -->
+    <div class="seal" id="seal"></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     CONTENEDOR CONFETTI DORADO
+========================= -->
+<div id="petal-container"></div>
+
+
+
+<!-- =========================
+     CONTENIDO PRINCIPAL
+========================= -->
 <div class="main-content" id="mainContent">
 
-  <!-- VIDEO (SIEMPRE ARRIBA) -->
-  <div class="video-container" id="videoContainer">
-    <video id="mainVideo" autoplay muted loop playsinline>
+  <!-- =========================
+       VIDEO (SIEMPRE ARRIBA)
+  ========================= -->
+  <div class="video-container">
+    <video id="weddingVideo" playsinline loop muted autoplay>
       <source src="video.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- FECHA -->
-  <div class="section-card">
-    <h2>Nuestra Boda</h2>
-    <p>28 de marzo de 2026</p>
-    <div id="countdown"></div>
+  <!-- INDICADOR -->
+  <div class="scroll-hint" id="scrollHint">
+    ⬇ Desliza para ver más ⬇
   </div>
 
-  <!-- UBICACIÓN -->
-  <div class="section-card">
-    <h2>Ubicación</h2>
+
+
+  <!-- =========================
+       CUENTA REGRESIVA
+  ========================= -->
+  <div class="section-card" id="countdownSection">
+    <h2>Faltan</h2>
+    <div class="countdown" id="countdown"></div>
+  </div>
+
+
+
+  <!-- =========================
+       MENSAJE DE LOS NOVIOS
+  ========================= -->
+  <div class="section-card" id="messageSection">
+    <h2>Nuestro Mensaje</h2>
     <p>
-      Registro Civil<br>
-      Tlanepantla Valle Dorado<br>
-      Plaza City Shops<br>
-      (Dentro de la plaza)
+      Hoy celebramos el inicio de una nueva etapa,
+      uniendo nuestras vidas con amor, respeto y esperanza.
+      Gracias por acompañarnos en este momento tan especial.
+    </p>
+  </div>
+ <!-- =========================
+       UBICACIÓN
+  ========================= -->
+  <div class="section-card" id="locationSection">
+    <h2>Registro Civil</h2>
+    <p>
+      📍 Tlanepantla Valle Dorado <br>
+      Plaza City Shops <br>
+      (El Registro Civil se encuentra dentro de la plaza)
     </p>
     <br>
-    <button class="btn-shiny" onclick="abrirMapa()">Ver ubicación</button>
+    <button class="btn-shiny" id="mapButton">
+      Ver en Google Maps
+    </button>
   </div>
-
-  <!-- CÓDIGO DE VESTIMENTA -->
-  <div class="section-card dress-wrapper">
-    <h2>Código de Vestimenta</h2>
-
+  <!-- =========================
+       DRESS CODE
+  ========================= -->
+  <div class="section-card dress-wrapper" id="dressSection">
     <div class="dress-switch" id="dressSwitch"></div>
-
-    <div id="dressContent">
-      Formal Elegante<br>
-      Colores claros y neutros
+    <h2>Dress Code</h2>
+    <div class="dress-content" id="dressContent">
+      👔 Hombres:<br><br>
+      • Traje formal oscuro<br>
+      • Camisa blanca o beige<br>
+      • Corbata o moño elegante<br>
+      • Zapato formal negro o café
     </div>
   </div>
-
-  <!-- CONFIRMACIÓN -->
-  <div class="section-card">
+  <!-- =========================
+       CONFIRMAR ASISTENCIA
+  ========================= -->
+  <div class="section-card" id="confirmSection">
     <h2>Confirma tu asistencia</h2>
-
-    <input 
-      type="tel" 
-      id="telefono" 
-      placeholder="Ingresa tu número de teléfono"
-      style="
-        width:100%;
-        padding:12px;
-        border-radius:30px;
-        border:1px solid var(--dorado);
-        background:rgba(0,0,0,.5);
-        color:var(--dorado);
-        margin-bottom:15px;
-        font-size:16px;
-        text-align:center;
-      "
-    >
-
+    <p>
+      Será un honor contar contigo en este día tan importante.
+    </p>
     <br>
-
-    <button class="btn-shiny" onclick="confirmarAsistencia()">
-      Confirmar vía WhatsApp
+    <button class="btn-shiny" id="confirmButton">
+      Confirmar por WhatsApp
     </button>
-
   </div>
-
-  <!-- MENSAJE FINAL -->
-  <div class="closing-card">
-    Será un honor compartir este momento tan especial contigo.<br><br>
-    Con cariño,<br>
-    Javi & Irli
+  <!-- =========================
+       TARJETA FINAL
+  ========================= -->
+  <div class="closing-card" id="closingSection">
+    Gracias por formar parte de nuestra historia. <br><br>
+    Con todo nuestro amor,<br>
+    Javi & Irli 💍✨
   </div>
-
 </div>
 <script>
 /* ======================================
@@ -578,9 +698,9 @@ async function confirmarAsistencia(){
  window.location.href=url;
 }
 </script>
-
 </body>
 </html>
+
 
 
 
