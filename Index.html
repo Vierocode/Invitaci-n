@@ -7,16 +7,15 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-
-
 <style>
+
 /* ===============================
    VARIABLES
 =================================*/
 :root{
   --dorado:#C6A85B;
   --dorado-suave:#E7D49A;
-  --rosa:#f4c2d7;
+  --dorado-brillo:#F5E6B3;
   --fondo-oscuro:rgba(0,0,0,0.55);
   --card-bg:rgba(0,0,0,0.55);
 }
@@ -35,12 +34,11 @@ body{
   color:var(--dorado);
   text-align:center;
   overflow-x:hidden;
-
   background: url("fondo.png") no-repeat center center fixed;
   background-size:cover;
 }
 
-/* Capa oscura elegante */
+/* Overlay elegante */
 body::before{
   content:"";
   position:fixed;
@@ -50,16 +48,15 @@ body::before{
 }
 
 /* ===============================
-   INTRO SUPERIOR
+   INTRO
 =================================*/
 
 .intro-text{
-  text-align:center;
   padding:60px 20px 20px;
   font-size:30px;
   line-height:1.4;
   font-weight:500;
-  text-shadow:0 2px 8px rgba(0,0,0,.6);
+  text-shadow:0 2px 12px rgba(0,0,0,.7);
 }
 
 .intro-text .familia{
@@ -94,41 +91,10 @@ body::before{
   border-radius:4px;
 }
 
-.envelope::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:0;
-  height:0;
-  border-left:140px solid transparent;
-  border-right:140px solid transparent;
-  border-top:90px solid #e6e6e6;
-  border-radius:4px 4px 0 0;
-}
-
 .envelope:hover{
   transform:translateY(-5px);
 }
 
-.envelope.open{
-  transform:scale(1.1);
-}
-
-/* Monograma */
-.envelope::after{
-  content:"J & I";
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-family:'Great Vibes', cursive;
-  font-size:42px;
-  color:rgba(0,0,0,0.5);
-  pointer-events:none;
-}
-
-/* Sello */
 .seal{
   width:75px;
   height:75px;
@@ -137,8 +103,7 @@ body::before{
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  background:
-    radial-gradient(circle at 30% 30%, #a06b1e, #6e4610 70%);
+  background:radial-gradient(circle at 30% 30%, #a06b1e, #6e4610 70%);
   box-shadow:
     inset 0 4px 6px rgba(255,255,255,.2),
     inset 0 -4px 6px rgba(0,0,0,.6),
@@ -152,23 +117,30 @@ body::before{
 }
 
 /* ===============================
-   CONFETTI DORADO (ANTES PÉTALOS)
+   LLUVIA DE MONEDAS
 =================================*/
 
-.petal{
+.coin{
   position:fixed;
-  top:-20px;
-  width:12px;
-  height:12px;
-  background:linear-gradient(145deg,var(--dorado),var(--dorado-suave));
+  top:-40px;
+  width:14px;
+  height:14px;
   border-radius:50%;
-  opacity:.9;
+  background:radial-gradient(circle at 30% 30%, var(--dorado-brillo), var(--dorado) 60%, #8f6f2d 90%);
+  box-shadow:
+    inset 0 0 6px rgba(255,255,255,.6),
+    0 0 8px rgba(198,168,91,.6);
   pointer-events:none;
-  animation:fall linear forwards;
+  opacity:.85;
+  animation:coinFall linear forwards;
 }
 
-@keyframes fall{
-  to{
+@keyframes coinFall{
+  0%{
+    transform:translateY(0) rotate(0deg);
+    opacity:.9;
+  }
+  100%{
     transform:translateY(110vh) rotate(720deg);
     opacity:0;
   }
@@ -181,7 +153,7 @@ body::before{
 .main-content{
   display:none;
   opacity:0;
-  transition:opacity 1.2s ease;
+  transition:opacity 1.5s ease;
   padding-top:40px;
 }
 
@@ -202,47 +174,31 @@ body::before{
 }
 
 /* ===============================
-   VIDEO (AHORA SIEMPRE ARRIBA)
+   VIDEO CINEMATOGRÁFICO
 =================================*/
 
 .video-container{
   width:100%;
-  max-width:900px;
+  max-width:950px;
   margin:0 auto 40px;
   padding:15px;
   border:2px solid var(--dorado);
   border-radius:25px;
-  box-shadow:0 0 40px rgba(198,168,91,.4);
   background:var(--card-bg);
+  box-shadow:0 0 60px rgba(198,168,91,.4);
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 1.5s ease;
+}
+
+.video-container.show{
+  opacity:1;
+  transform:translateY(0);
 }
 
 .video-container video{
   width:100%;
   border-radius:18px;
-}
-
-/* ===============================
-   SCROLL INDICATOR
-=================================*/
-
-.scroll-hint{
-  opacity:0;
-  margin:20px auto 0;
-  font-size:22px;
-  text-align:center;
-  display:block;
-  width:100%;
-  animation:bounce 2s infinite;
-  transition:opacity .6s ease;
-}
-
-.scroll-hint.show{
-  opacity:1;
-}
-
-@keyframes bounce{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(12px);}
 }
 
 /* ===============================
@@ -271,9 +227,7 @@ body::before{
 .section-card h2{
   font-family:'Great Vibes', cursive;
   font-size:36px;
-  font-weight:400;
   margin-bottom:25px;
-  letter-spacing:1px;
 }
 
 .section-card p,
@@ -301,42 +255,15 @@ body::before{
 }
 
 .btn-shiny:hover{
-  transform:scale(1.05);
-}
-
-.btn-shiny::after{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.6),transparent);
-  animation:shine 3s infinite;
-}
-
-@keyframes shine{
-  0%{left:-100%;}
-  50%{left:100%;}
-  100%{left:100%;}
+  transform:scale(1.07);
 }
 
 /* ===============================
-   COUNTDOWN
-=================================*/
-
-.countdown{
-  font-size:22px;
-  letter-spacing:1px;
-}
-
-/* ===============================
-   DRESS CODE
+   DRESS SWITCH
 =================================*/
 
 .dress-wrapper{
   position:relative;
-  text-align:center;
 }
 
 .dress-switch{
@@ -389,14 +316,7 @@ body::before{
 
 .intro-text{
   padding:80px 20px 30px;
-  font-size:34px;
-  line-height:1.6;
-}
-
-.intro-text .familia{
-  margin-top:20px;
-  font-size:24px;
-  letter-spacing:2px;
+  font-size:32px;
 }
 
 .section-card{
@@ -408,400 +328,352 @@ body::before{
 }
 
 }
+
 </style>
 </head>
 <body>
 
-<!-- =========================
-     AUDIO
-========================= -->
-<audio id="bgMusic" loop>
-  <source src="Intro.m4a" type="audio/mp4">
+<!-- AUDIO DE FONDO -->
+<audio id="bgMusic" preload="auto" loop>
+  <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
-
-<!-- =========================
-     INTRO PERSONALIZABLE
-========================= -->
-<div class="intro-text">
-
-  <div id="mainNames">
-    Con amor Javi & Irli <br>
-    los invitamos a nuestra boda
-  </div>
-
-  <div class="familia" id="familyName">
-    Familia Salas Ponce
-  </div>
-
+<!-- INTRO -->
+<div class="intro-text" id="introText">
+  <div id="nombresInvitados">Javi & Irli</div>
+  <div class="familia" id="familiaInvitada"></div>
 </div>
 
-
-<!-- =========================
-     SOBRE
-========================= -->
-<div class="envelope-wrapper">
-
+<!-- SOBRE -->
+<div class="envelope-wrapper" id="envelopeWrapper">
   <div class="envelope" id="envelope">
-
-    <!-- SELLO -->
     <div class="seal" id="seal"></div>
-
   </div>
-
 </div>
 
-
-<!-- =========================
-     CONTENEDOR CONFETTI DORADO
-========================= -->
-<div id="petal-container"></div>
-
-
-
-<!-- =========================
-     CONTENIDO PRINCIPAL
-========================= -->
+<!-- CONTENIDO PRINCIPAL -->
 <div class="main-content" id="mainContent">
 
-  <!-- =========================
-       VIDEO (SIEMPRE ARRIBA)
-  ========================= -->
-  <div class="video-container">
-    <video id="weddingVideo" playsinline loop muted autoplay>
+  <!-- VIDEO (SIEMPRE ARRIBA) -->
+  <div class="video-container" id="videoContainer">
+    <video id="mainVideo" autoplay muted loop playsinline>
       <source src="video.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- INDICADOR -->
-  <div class="scroll-hint" id="scrollHint">
-    ⬇ Desliza para ver más ⬇
+  <!-- FECHA -->
+  <div class="section-card">
+    <h2>Nuestra Boda</h2>
+    <p>28 de marzo de 2026</p>
+    <div id="countdown"></div>
   </div>
 
-
-
-  <!-- =========================
-       CUENTA REGRESIVA
-  ========================= -->
-  <div class="section-card" id="countdownSection">
-    <h2>Faltan</h2>
-    <div class="countdown" id="countdown"></div>
-  </div>
-
-
-
-  <!-- =========================
-       MENSAJE DE LOS NOVIOS
-  ========================= -->
-  <div class="section-card" id="messageSection">
-    <h2>Nuestro Mensaje</h2>
+  <!-- UBICACIÓN -->
+  <div class="section-card">
+    <h2>Ubicación</h2>
     <p>
-      Hoy celebramos el inicio de una nueva etapa,
-      uniendo nuestras vidas con amor, respeto y esperanza.
-      Gracias por acompañarnos en este momento tan especial.
+      Registro Civil<br>
+      Tlanepantla Valle Dorado<br>
+      Plaza City Shops<br>
+      (Dentro de la plaza)
     </p>
-  </div>
-
-
-
-  <!-- =========================
-       UBICACIÓN
-  ========================= -->
-  <div class="section-card" id="locationSection">
-    <h2>Registro Civil</h2>
-
-    <p>
-      📍 Tlanepantla Valle Dorado <br>
-      Plaza City Shops <br>
-      (El Registro Civil se encuentra dentro de la plaza)
-    </p>
-
     <br>
-
-    <button class="btn-shiny" id="mapButton">
-      Ver en Google Maps
-    </button>
+    <button class="btn-shiny" onclick="abrirMapa()">Ver ubicación</button>
   </div>
 
-
-
-  <!-- =========================
-       DRESS CODE
-  ========================= -->
-  <div class="section-card dress-wrapper" id="dressSection">
+  <!-- CÓDIGO DE VESTIMENTA -->
+  <div class="section-card dress-wrapper">
+    <h2>Código de Vestimenta</h2>
 
     <div class="dress-switch" id="dressSwitch"></div>
 
-    <h2>Dress Code</h2>
-
-    <div class="dress-content" id="dressContent">
-      👔 Hombres:<br><br>
-      • Traje formal oscuro<br>
-      • Camisa blanca o beige<br>
-      • Corbata o moño elegante<br>
-      • Zapato formal negro o café
+    <div id="dressContent">
+      Formal Elegante<br>
+      Colores claros y neutros
     </div>
-
   </div>
 
-
-
-  <!-- =========================
-       CONFIRMAR ASISTENCIA
-  ========================= -->
-  <div class="section-card" id="confirmSection">
+  <!-- CONFIRMACIÓN -->
+  <div class="section-card">
     <h2>Confirma tu asistencia</h2>
-    <p>
-      Será un honor contar contigo en este día tan importante.
-    </p>
+
+    <input 
+      type="tel" 
+      id="telefono" 
+      placeholder="Ingresa tu número de teléfono"
+      style="
+        width:100%;
+        padding:12px;
+        border-radius:30px;
+        border:1px solid var(--dorado);
+        background:rgba(0,0,0,.5);
+        color:var(--dorado);
+        margin-bottom:15px;
+        font-size:16px;
+        text-align:center;
+      "
+    >
+
     <br>
-    <button class="btn-shiny" id="confirmButton">
-      Confirmar por WhatsApp
+
+    <button class="btn-shiny" onclick="confirmarAsistencia()">
+      Confirmar vía WhatsApp
     </button>
+
   </div>
 
-
-
-  <!-- =========================
-       TARJETA FINAL
-  ========================= -->
-  <div class="closing-card" id="closingSection">
-    Gracias por formar parte de nuestra historia. <br><br>
-    Con todo nuestro amor,<br>
-    Javi & Irli 💍✨
+  <!-- MENSAJE FINAL -->
+  <div class="closing-card">
+    Será un honor compartir este momento tan especial contigo.<br><br>
+    Con cariño,<br>
+    Javi & Irli
   </div>
-
 
 </div>
 <script>
 
-/* =========================
-   VARIABLES GLOBALES
-========================= */
+/* =========================================
+   CONFIGURACIÓN
+========================================= */
+
+const GOOGLE_SCRIPT_URL = "https://docs.google.com/spreadsheets/d/1XO1M_U2U_lcmDc3zj2RmMt1ZNDyKHSAQQEWcKluCvlg/edit?gid=0#gid=0"; // ← PON AQUÍ TU URL
+
+const fechaBoda = new Date("March 28, 2026 00:00:00").getTime();
+
+let monedasActivas = true;
+let envioRealizado = false;
+
+/* =========================================
+   LEER PARÁMETROS URL
+========================================= */
+
+function obtenerParametro(nombre) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(nombre);
+}
+
+const familia = obtenerParametro("familia") || "Nuestra querida familia";
+const nombres = obtenerParametro("nombres") || "Javi & Irli";
+
+document.getElementById("familiaInvitada").innerText = familia;
+document.getElementById("nombresInvitados").innerText = nombres;
+
+/* =========================================
+   SOBRE - APERTURA
+========================================= */
 
 const envelope = document.getElementById("envelope");
 const seal = document.getElementById("seal");
 const mainContent = document.getElementById("mainContent");
+const introText = document.getElementById("introText");
+const envelopeWrapper = document.getElementById("envelopeWrapper");
+const videoContainer = document.getElementById("videoContainer");
 const bgMusic = document.getElementById("bgMusic");
-const video = document.getElementById("weddingVideo");
-const scrollHint = document.getElementById("scrollHint");
-const petalContainer = document.getElementById("petal-container");
-const countdownEl = document.getElementById("countdown");
-const mapButton = document.getElementById("mapButton");
-const confirmButton = document.getElementById("confirmButton");
-const dressSwitch = document.getElementById("dressSwitch");
-const dressContent = document.getElementById("dressContent");
-const familyName = document.getElementById("familyName");
-const mainNames = document.getElementById("mainNames");
-
-let invitationOpened = false;
-
-
-/* =========================
-   PERSONALIZACIÓN POR URL
-   ?familia=Familia%20López&nombres=Javi%20%26%20Irli
-========================= */
-
-const params = new URLSearchParams(window.location.search);
-
-const nombres = params.get("nombres");
-const familia = params.get("familia");
-
-if (nombres) {
-  mainNames.innerHTML = `
-    Con amor ${nombres} <br>
-    los invitamos a nuestra boda
-  `;
-}
-
-if (familia) {
-  familyName.textContent = familia;
-}
-
-
-/* =========================
-   ABRIR SOBRE
-========================= */
 
 envelope.addEventListener("click", () => {
 
-  if (invitationOpened) return;
-  invitationOpened = true;
-
   seal.classList.add("break");
-  createGoldenConfetti();
-
-  document.querySelector(".intro-text").classList.add("intro-hide");
-  document.querySelector(".envelope-wrapper").classList.add("intro-hide");
 
   setTimeout(() => {
+    introText.classList.add("intro-hide");
+    envelopeWrapper.classList.add("intro-hide");
+  }, 600);
 
+  setTimeout(() => {
     mainContent.classList.add("show");
-
-    bgMusic.volume = 0.6;
-    bgMusic.play().catch(()=>{});
-
-    video.muted = false;
-    video.play().catch(()=>{});
-
-    window.scrollTo({
-      top: mainContent.offsetTop - 20,
-      behavior: "smooth"
-    });
-
-  }, 1000);
+    videoContainer.classList.add("show");
+    iniciarMusica();
+    iniciarLluviaMonedas();
+    animarCards();
+  }, 1200);
 
 });
 
+/* =========================================
+   FADE IN MÚSICA
+========================================= */
 
-/* =========================
-   CONFETTI DORADO
-========================= */
+function iniciarMusica() {
+  bgMusic.volume = 0;
+  bgMusic.play();
 
-function createGoldenConfetti() {
-
-  for (let i = 0; i < 60; i++) {
-
-    const coin = document.createElement("div");
-    coin.classList.add("petal");
-
-    coin.style.left = Math.random() * 100 + "vw";
-    coin.style.animationDuration = (Math.random() * 3 + 3) + "s";
-    coin.style.transform = `rotate(${Math.random()*360}deg)`;
-
-    petalContainer.appendChild(coin);
-
-    setTimeout(() => {
-      coin.remove();
-    }, 6000);
-  }
+  let vol = 0;
+  const fade = setInterval(() => {
+    if (vol < 0.6) {
+      vol += 0.02;
+      bgMusic.volume = vol;
+    } else {
+      clearInterval(fade);
+    }
+  }, 200);
 }
 
+/* =========================================
+   LLUVIA DE MONEDAS ELEGANTE
+========================================= */
 
-/* =========================
+function crearMoneda() {
+
+  if (!monedasActivas) return;
+
+  const coin = document.createElement("div");
+  coin.classList.add("coin");
+
+  coin.style.left = Math.random() * 100 + "vw";
+  coin.style.animationDuration = (8 + Math.random() * 6) + "s";
+  coin.style.opacity = 0.5 + Math.random() * 0.5;
+
+  document.body.appendChild(coin);
+
+  setTimeout(() => {
+    coin.remove();
+  }, 14000);
+}
+
+function iniciarLluviaMonedas() {
+  setInterval(crearMoneda, 600);
+}
+
+/* =========================================
+   ANIMACIÓN CARDS
+========================================= */
+
+function animarCards() {
+  const cards = document.querySelectorAll(".section-card");
+  cards.forEach((card, index) => {
+    setTimeout(() => {
+      card.classList.add("visible");
+    }, index * 300);
+  });
+}
+
+/* =========================================
    CUENTA REGRESIVA
-   28 MARZO 2026 - 16:00 hrs
-========================= */
+========================================= */
 
-const weddingDate = new Date("2026-03-28T16:00:00").getTime();
+const countdownEl = document.getElementById("countdown");
 
-function updateCountdown() {
+setInterval(() => {
 
-  const now = new Date().getTime();
-  const distance = weddingDate - now;
+  const ahora = new Date().getTime();
+  const distancia = fechaBoda - ahora;
 
-  if (distance <= 0) {
-    countdownEl.innerHTML = "¡Hoy es el gran día! 💍✨";
+  if (distancia < 0) {
+    countdownEl.innerHTML = "¡Hoy es el gran día!";
     return;
   }
 
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+  const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
 
-  countdownEl.innerHTML = `
-    ${days} días <br>
-    ${hours} hrs ${minutes} min ${seconds} seg
-  `;
+  countdownEl.innerHTML =
+    dias + " días " +
+    horas + " hrs " +
+    minutos + " min " +
+    segundos + " seg";
+
+}, 1000);
+
+/* =========================================
+   MAPA
+========================================= */
+
+function abrirMapa() {
+  window.open(
+    "https://www.google.com/maps/search/?api=1&query=Tlanepantla+Valle+Dorado+Plaza+City+Shops+Registro+Civil",
+    "_blank"
+  );
 }
 
-setInterval(updateCountdown, 1000);
-updateCountdown();
+/* =========================================
+   SWITCH DRESS
+========================================= */
 
-
-/* =========================
-   GOOGLE MAPS
-========================= */
-
-mapButton.addEventListener("click", () => {
-
-  const mapsURL = "https://www.google.com/maps/search/?api=1&query=Plaza+City+Shops+Valle+Dorado+Tlalnepantla";
-
-  window.open(mapsURL, "_blank");
-
-});
-
-
-/* =========================
-   CONFIRMAR WHATSAPP
-========================= */
-
-confirmButton.addEventListener("click", () => {
-
-  const telefono = "521XXXXXXXXXX"; // <-- PON AQUÍ TU NÚMERO REAL
-
-  const mensaje = encodeURIComponent(
-    "Hola Javi & Irli 💍✨ Confirmo mi asistencia a su boda el 28 de marzo de 2026."
-  );
-
-  const url = `https://wa.me/${telefono}?text=${mensaje}`;
-
-  window.open(url, "_blank");
-
-});
-
-
-/* =========================
-   DRESS CODE SWITCH
-========================= */
-
-let showingMen = true;
+const dressSwitch = document.getElementById("dressSwitch");
+const dressContent = document.getElementById("dressContent");
 
 dressSwitch.addEventListener("click", () => {
 
-  showingMen = !showingMen;
+  dressSwitch.classList.toggle("active");
 
-  if (showingMen) {
-
-    dressContent.innerHTML = `
-      👔 Hombres:<br><br>
-      • Traje formal oscuro<br>
-      • Camisa blanca o beige<br>
-      • Corbata o moño elegante<br>
-      • Zapato formal negro o café
-    `;
-
-    dressSwitch.classList.remove("active");
-
+  if (dressSwitch.classList.contains("active")) {
+    dressContent.innerHTML = "Etiqueta Formal<br>Toques dorados bienvenidos ✨";
   } else {
-
-    dressContent.innerHTML = `
-      👗 Mujeres:<br><br>
-      • Vestido formal largo o midi<br>
-      • Colores elegantes (beige, verde, vino, azul marino)<br>
-      • Tacón o zapatilla formal<br>
-      • Accesorios delicados
-    `;
-
-    dressSwitch.classList.add("active");
+    dressContent.innerHTML = "Formal Elegante<br>Colores claros y neutros";
   }
 
 });
 
+/* =========================================
+   CONFIRMAR ASISTENCIA
+========================================= */
 
-/* =========================
-   ANIMACIÓN AL HACER SCROLL
-========================= */
+async function confirmarAsistencia() {
 
-const sections = document.querySelectorAll(".section-card, .closing-card");
+  if (envioRealizado) {
+    alert("Tu confirmación ya fue enviada ❤️");
+    return;
+  }
 
-const observer = new IntersectionObserver(entries => {
+  const telefono = document.getElementById("telefono").value.trim();
 
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-    }
-  });
+  if (!telefono) {
+    alert("Por favor ingresa tu número de teléfono");
+    return;
+  }
 
-}, { threshold: 0.2 });
+  envioRealizado = true;
 
-sections.forEach(section => {
-  observer.observe(section);
+  const mensaje = `Hola, confirmo mi asistencia a la boda. Familia: ${familia}`;
+
+  /* ---------- ENVIAR A GOOGLE SHEETS ---------- */
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        telefono: telefono,
+        confirmacion: "Confirmado",
+        familia: familia
+      }),
+    });
+  } catch (error) {
+    console.log("Error enviando a Sheets:", error);
+  }
+
+  /* ---------- ABRIR WHATSAPP ---------- */
+
+  const numeroDestino = "521XXXXXXXXXX"; // ← TU NÚMERO
+  const url = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(mensaje)}`;
+
+  window.open(url, "_blank");
+
+}
+
+/* =========================================
+   SCROLL AUTOMÁTICO AL VIDEO
+========================================= */
+
+const observer = new MutationObserver(() => {
+  if (mainContent.classList.contains("show")) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
 });
+
+observer.observe(mainContent, { attributes: true });
 
 </script>
 
 </body>
 </html>
+
 
