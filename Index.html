@@ -550,159 +550,232 @@ body::before{
   </div>
 </div>
 <script>
-/* ======================================
-   CONFIGURACIÓN GENERAL
-   Aquí defines:
-   - URL del Google Apps Script
-   - Número de WhatsApp destino
-   - Fecha y hora exacta de la boda
-====================================== */
-const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec";
-const NUMERO_WHATSAPP="5217716995004";
-const fechaBoda=new Date("2026-03-28T11:00:00").getTime();
-let envioRealizado=false;
 
-/* ======================================
-   OBTENER PARÁMETROS DE LA URL
-   Lee ?familia= y ?nombres=
-====================================== */
-function obtenerParametro(nombre){
- const params=new URLSearchParams(window.location.search);
- return params.get(nombre);
+/* =========================
+   VARIABLES GLOBALES
+========================= */
+
+const envelope = document.getElementById("envelope");
+const seal = document.getElementById("seal");
+const mainContent = document.getElementById("mainContent");
+const bgMusic = document.getElementById("bgMusic");
+const video = document.getElementById("weddingVideo");
+const scrollHint = document.getElementById("scrollHint");
+const petalContainer = document.getElementById("petal-container");
+const countdownEl = document.getElementById("countdown");
+const mapButton = document.getElementById("mapButton");
+const confirmButton = document.getElementById("confirmButton");
+const dressSwitch = document.getElementById("dressSwitch");
+const dressContent = document.getElementById("dressContent");
+const familyName = document.getElementById("familyName");
+const mainNames = document.getElementById("mainNames");
+
+let invitationOpened = false;
+
+
+/* =========================
+   PERSONALIZACIÓN POR URL
+   ?familia=Familia%20López&nombres=Javi%20%26%20Irli
+========================= */
+
+const params = new URLSearchParams(window.location.search);
+
+const nombres = params.get("nombres");
+const familia = params.get("familia");
+
+if (nombres) {
+  mainNames.innerHTML = `
+    Con amor ${nombres} <br>
+    los invitamos a nuestra boda
+  `;
 }
-const familia=obtenerParametro("familia")||"Familia Invitada";
-const nombres=obtenerParametro("nombres")||"Javi & Irli";
-document.getElementById("familiaInvitada").innerText=familia;
-document.getElementById("nombresInvitados").innerText=nombres;
 
-/* ======================================
-   GENERAR INICIALES EN EL SELLO
-====================================== */
-const seal=document.getElementById("seal");
-function obtenerIniciales(texto){
- return texto.split("&")[0].trim().split(" ").map(p=>p[0]).join("").toUpperCase();
+if (familia) {
+  familyName.textContent = familia;
 }
-seal.innerHTML=`<span style="color:white;font-size:26px;font-family:'Great Vibes',cursive;">${obtenerIniciales(nombres)}</span>`;
 
-/* ======================================
-   APERTURA DEL SOBRE
-   Muestra contenido principal
-====================================== */
-const envelope=document.getElementById("envelope");
-const mainContent=document.getElementById("mainContent");
-const introText=document.getElementById("introText");
-const envelopeWrapper=document.getElementById("envelopeWrapper");
-const bgMusic=document.getElementById("bgMusic");
 
-envelope.addEventListener("click",()=>{
- seal.classList.add("break");
- introText.style.display="none";
- envelopeWrapper.style.display="none";
- mainContent.classList.add("show");
- window.scrollTo(0,0);
- iniciarMusica();
- iniciarLluviaMonedas();
+/* =========================
+   ABRIR SOBRE
+========================= */
+
+envelope.addEventListener("click", () => {
+
+  if (invitationOpened) return;
+  invitationOpened = true;
+
+  seal.classList.add("break");
+  createGoldenConfetti();
+
+  document.querySelector(".intro-text").classList.add("intro-hide");
+  document.querySelector(".envelope-wrapper").classList.add("intro-hide");
+
+  setTimeout(() => {
+
+    mainContent.classList.add("show");
+
+    bgMusic.volume = 0.6;
+    bgMusic.play().catch(()=>{});
+
+    video.muted = false;
+    video.play().catch(()=>{});
+
+    window.scrollTo({
+      top: mainContent.offsetTop - 20,
+      behavior: "smooth"
+    });
+
+  }, 1000);
+
 });
 
-/* ======================================
-   MÚSICA CON PROTECCIÓN ANTI ERROR
-====================================== */
-function iniciarMusica(){
- try{
-  bgMusic.volume=0;
-  bgMusic.loop=true;
-  bgMusic.play().catch(()=>{});
-  let vol=0;
-  const fade=setInterval(()=>{
-   if(vol<0.6){
-    vol+=0.03;
-    bgMusic.volume=vol;
-   }else clearInterval(fade);
-  },200);
- }catch(e){
-  console.log("Audio bloqueado pero no rompe:",e);
- }
+
+/* =========================
+   CONFETTI DORADO
+========================= */
+
+function createGoldenConfetti() {
+
+  for (let i = 0; i < 60; i++) {
+
+    const coin = document.createElement("div");
+    coin.classList.add("petal");
+
+    coin.style.left = Math.random() * 100 + "vw";
+    coin.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    coin.style.transform = `rotate(${Math.random()*360}deg)`;
+
+    petalContainer.appendChild(coin);
+
+    setTimeout(() => {
+      coin.remove();
+    }, 6000);
+  }
 }
 
-/* ======================================
-   LLUVIA DE MONEDAS
-====================================== */
-function crearMoneda(){
- const coin=document.createElement("div");
- coin.classList.add("coin");
- coin.style.left=Math.random()*100+"vw";
- coin.style.animationDuration=(8+Math.random()*6)+"s";
- document.body.appendChild(coin);
- setTimeout(()=>coin.remove(),15000);
-}
-function iniciarLluviaMonedas(){
- setInterval(crearMoneda,800);
-}
 
-/* ======================================
-   CUENTA REGRESIVA DINÁMICA
-====================================== */
-const countdownEl=document.getElementById("countdown");
-setInterval(()=>{
- const ahora=new Date().getTime();
- const distancia=fechaBoda-ahora;
- if(distancia<=0){
-  countdownEl.innerHTML="¡Hoy es el gran día!";
-  return;
- }
- const dias=Math.floor(distancia/(1000*60*60*24));
- const horas=Math.floor((distancia%(1000*60*60*24))/(1000*60*60));
- const minutos=Math.floor((distancia%(1000*60*60))/(1000*60));
- const segundos=Math.floor((distancia%(1000*60))/1000);
- countdownEl.innerHTML=`${dias} días ${horas} hrs ${minutos} min ${segundos} seg`;
-},1000);
+/* =========================
+   CUENTA REGRESIVA
+   28 MARZO 2026 - 16:00 hrs
+========================= */
 
-/* ======================================
-   BOTÓN UBICACIÓN
-====================================== */
-function abrirMapa(){
- window.open("https://www.google.com/maps/search/?api=1&query=Tlalnepantla+Valle+Dorado+Plaza+City+Shops+Registro+Civil","_blank");
+const weddingDate = new Date("2026-03-28T16:00:00").getTime();
+
+function updateCountdown() {
+
+  const now = new Date().getTime();
+  const distance = weddingDate - now;
+
+  if (distance <= 0) {
+    countdownEl.innerHTML = "¡Hoy es el gran día! 💍✨";
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  countdownEl.innerHTML = `
+    ${days} días <br>
+    ${hours} hrs ${minutes} min ${seconds} seg
+  `;
 }
 
-/* ======================================
-   CONFIRMAR ASISTENCIA
-   - Envía datos a Google Sheets
-   - Redirige a WhatsApp con mensaje
-====================================== */
-async function confirmarAsistencia(){
- if(envioRealizado){
-  alert("Ya registramos tu confirmación ❤️");
-  return;
- }
- const telefono=document.getElementById("telefono").value.trim();
- if(!telefono){
-  alert("Ingresa tu número por favor");
-  return;
- }
- envioRealizado=true;
- try{
-  await fetch(GOOGLE_SCRIPT_URL,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-    telefono:telefono,
-    confirmacion:"Confirmado",
-    familia:familia
-   })
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+
+/* =========================
+   GOOGLE MAPS
+========================= */
+
+mapButton.addEventListener("click", () => {
+
+  const mapsURL = "https://www.google.com/maps/search/?api=1&query=Plaza+City+Shops+Valle+Dorado+Tlalnepantla";
+
+  window.open(mapsURL, "_blank");
+
+});
+
+
+/* =========================
+   CONFIRMAR WHATSAPP
+========================= */
+
+confirmButton.addEventListener("click", () => {
+
+  const telefono = "521XXXXXXXXXX"; // <-- PON AQUÍ TU NÚMERO REAL
+
+  const mensaje = encodeURIComponent(
+    "Hola Javi & Irli 💍✨ Confirmo mi asistencia a su boda el 28 de marzo de 2026."
+  );
+
+  const url = `https://wa.me/${telefono}?text=${mensaje}`;
+
+  window.open(url, "_blank");
+
+});
+
+
+/* =========================
+   DRESS CODE SWITCH
+========================= */
+
+let showingMen = true;
+
+dressSwitch.addEventListener("click", () => {
+
+  showingMen = !showingMen;
+
+  if (showingMen) {
+
+    dressContent.innerHTML = `
+      👔 Hombres:<br><br>
+      • Traje formal oscuro<br>
+      • Camisa blanca o beige<br>
+      • Corbata o moño elegante<br>
+      • Zapato formal negro o café
+    `;
+
+    dressSwitch.classList.remove("active");
+
+  } else {
+
+    dressContent.innerHTML = `
+      👗 Mujeres:<br><br>
+      • Vestido formal largo o midi<br>
+      • Colores elegantes (beige, verde, vino, azul marino)<br>
+      • Tacón o zapatilla formal<br>
+      • Accesorios delicados
+    `;
+
+    dressSwitch.classList.add("active");
+  }
+
+});
+
+
+/* =========================
+   ANIMACIÓN AL HACER SCROLL
+========================= */
+
+const sections = document.querySelectorAll(".section-card, .closing-card");
+
+const observer = new IntersectionObserver(entries => {
+
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+    }
   });
- }catch(error){
-  console.error("Error Sheets:",error);
- }
- const mensaje=`Hola, confirmo mi asistencia.\nFamilia: ${familia}\nTeléfono: ${telefono}`;
- const url=`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
- window.location.href=url;
-}
+
+}, { threshold: 0.2 });
+
+sections.forEach(section => {
+  observer.observe(section);
+});
+
 </script>
 </body>
 </html>
-
-
-
-
-
-
