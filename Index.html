@@ -34,13 +34,13 @@ body{
   font-family:'Cormorant Garamond', serif;
   color:var(--dorado);
   text-align:center;
+  overflow-x:hidden;
 
-  /* FONDO ESTÁTICO */
   background: url("fondo.png") no-repeat center center fixed;
   background-size:cover;
 }
 
-/* Capa oscura elegante sobre el fondo */
+/* Capa oscura elegante */
 body::before{
   content:"";
   position:fixed;
@@ -71,7 +71,7 @@ body::before{
 }
 
 /* ===============================
-   SOBRE PAPEL REALISTA
+   SOBRE
 =================================*/
 
 .envelope-wrapper{
@@ -87,14 +87,13 @@ body::before{
   height:180px;
   position:relative;
   cursor:pointer;
-
-  /* Papel marfil */
   background:linear-gradient(145deg,#dcdcdc,#f8f8f8);
   border:2px solid var(--dorado);
   box-shadow:0 20px 40px rgba(0,0,0,.5);
   transition:transform .6s ease;
   border-radius:4px;
-  }
+}
+
 .envelope::before{
   content:"";
   position:absolute;
@@ -107,15 +106,16 @@ body::before{
   border-top:90px solid #e6e6e6;
   border-radius:4px 4px 0 0;
 }
+
 .envelope:hover{
   transform:translateY(-5px);
 }
+
 .envelope.open{
   transform:scale(1.1);
 }
 
-
-/* Monograma dentro del sobre */
+/* Monograma */
 .envelope::after{
   content:"J & I";
   position:absolute;
@@ -128,7 +128,7 @@ body::before{
   pointer-events:none;
 }
 
-/* Sello de cera */
+/* Sello */
 .seal{
   width:75px;
   height:75px;
@@ -152,7 +152,7 @@ body::before{
 }
 
 /* ===============================
-   PÉTALOS FLOTANDO
+   CONFETTI DORADO (ANTES PÉTALOS)
 =================================*/
 
 .petal{
@@ -160,16 +160,16 @@ body::before{
   top:-20px;
   width:12px;
   height:12px;
-  background:var(--rosa);
-  border-radius:60% 40% 60% 40%;
-  opacity:.8;
-  animation:fall linear infinite;
+  background:linear-gradient(145deg,var(--dorado),var(--dorado-suave));
+  border-radius:50%;
+  opacity:.9;
   pointer-events:none;
+  animation:fall linear forwards;
 }
 
 @keyframes fall{
   to{
-    transform:translateY(110vh) rotate(360deg);
+    transform:translateY(110vh) rotate(720deg);
     opacity:0;
   }
 }
@@ -177,10 +177,12 @@ body::before{
 /* ===============================
    CONTENIDO PRINCIPAL
 =================================*/
+
 .main-content{
   display:none;
   opacity:0;
   transition:opacity 1.2s ease;
+  padding-top:40px;
 }
 
 .main-content.show{
@@ -200,12 +202,13 @@ body::before{
 }
 
 /* ===============================
-   VIDEO
+   VIDEO (AHORA SIEMPRE ARRIBA)
 =================================*/
 
 .video-container{
-  max-width:650px;
-  margin:0 auto 30px;
+  width:100%;
+  max-width:900px;
+  margin:0 auto 40px;
   padding:15px;
   border:2px solid var(--dorado);
   border-radius:25px;
@@ -224,7 +227,7 @@ body::before{
 
 .scroll-hint{
   opacity:0;
-  margin:30px auto 0;
+  margin:20px auto 0;
   font-size:22px;
   text-align:center;
   display:block;
@@ -243,7 +246,7 @@ body::before{
 }
 
 /* ===============================
-   TARJETAS MODALES
+   TARJETAS
 =================================*/
 
 .section-card{
@@ -278,8 +281,9 @@ body::before{
   font-size:20px;
   line-height:1.8;
 }
+
 /* ===============================
-   BOTONES SHINY
+   BOTONES
 =================================*/
 
 .btn-shiny{
@@ -362,12 +366,6 @@ body::before{
   left:25px;
 }
 
-.dress-content{
-  margin-top:20px;
-  font-size:18px;
-  line-height:1.6;
-}
-
 /* ===============================
    TARJETA FINAL
 =================================*/
@@ -384,57 +382,38 @@ body::before{
 }
 
 /* ===============================
-   FUEGOS ARTIFICIALES
-=================================*/
-
-.firework{
-  position:fixed;
-  width:6px;
-  height:6px;
-  background:var(--rosa);
-  border-radius:50%;
-  pointer-events:none;
-  animation:explode 1s ease-out forwards;
-}
-
-@keyframes explode{
-  to{
-    transform:translate(var(--x),var(--y));
-    opacity:0;
-  }
-}
-
-/* ===============================
    RESPONSIVE
 =================================*/
 
 @media(max-width:600px){
+
 .intro-text{
-  text-align:center;
   padding:80px 20px 30px;
   font-size:34px;
   line-height:1.6;
-  font-weight:500;
-  font-family:'Cormorant Garamond', serif;
 }
 
 .intro-text .familia{
   margin-top:20px;
   font-size:24px;
   letter-spacing:2px;
-  font-weight:600;
 }
 
-  .section-card{
-    padding:25px 20px;
-  }
+.section-card{
+  padding:25px 20px;
+}
+
+.video-container{
+  margin-top:20px;
+}
+
 }
 </style>
 </head>
 <body>
 
 <!-- =========================
-     AUDIO (se activará por script)
+     AUDIO
 ========================= -->
 <audio id="bgMusic" loop>
   <source src="Intro.m4a" type="audio/mp4">
@@ -446,12 +425,11 @@ body::before{
 ========================= -->
 <div class="intro-text">
 
-  <div>
+  <div id="mainNames">
     Con amor Javi & Irli <br>
     los invitamos a nuestra boda
   </div>
 
-  <!-- ESTE TEXTO SE PERSONALIZARÁ DINÁMICAMENTE -->
   <div class="familia" id="familyName">
     Familia Salas Ponce
   </div>
@@ -466,20 +444,6 @@ body::before{
 
   <div class="envelope" id="envelope">
 
-    <!-- MONOGRAMA CENTRAL -->
-    <div style="
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%,-50%);
-      font-family:'Great Vibes', cursive;
-      font-size:46px;
-      color:rgba(0,0,0,0.55);
-      pointer-events:none;
-    ">
-      J & I
-    </div>
-
     <!-- SELLO -->
     <div class="seal" id="seal"></div>
 
@@ -489,7 +453,7 @@ body::before{
 
 
 <!-- =========================
-     CONTENEDOR PÉTALOS
+     CONTENEDOR CONFETTI DORADO
 ========================= -->
 <div id="petal-container"></div>
 
@@ -500,12 +464,11 @@ body::before{
 ========================= -->
 <div class="main-content" id="mainContent">
 
-
   <!-- =========================
-       VIDEO
+       VIDEO (SIEMPRE ARRIBA)
   ========================= -->
   <div class="video-container">
-    <video id="weddingVideo" playsinline muted>
+    <video id="weddingVideo" playsinline loop muted autoplay>
       <source src="video.mp4" type="video/mp4">
     </video>
   </div>
@@ -533,9 +496,9 @@ body::before{
   <div class="section-card" id="messageSection">
     <h2>Nuestro Mensaje</h2>
     <p>
-      Aquí irá el mensaje hermoso que escribirán los novios.
-      Un pensamiento elegante, significativo y lleno de amor
-      para quienes forman parte de su historia.
+      Hoy celebramos el inicio de una nueva etapa,
+      uniendo nuestras vidas con amor, respeto y esperanza.
+      Gracias por acompañarnos en este momento tan especial.
     </p>
   </div>
 
@@ -546,10 +509,15 @@ body::before{
   ========================= -->
   <div class="section-card" id="locationSection">
     <h2>Registro Civil</h2>
+
     <p>
-      Nos encantaría que nos acompañaras en este momento tan especial.
+      📍 Tlanepantla Valle Dorado <br>
+      Plaza City Shops <br>
+      (El Registro Civil se encuentra dentro de la plaza)
     </p>
+
     <br>
+
     <button class="btn-shiny" id="mapButton">
       Ver en Google Maps
     </button>
@@ -562,7 +530,6 @@ body::before{
   ========================= -->
   <div class="section-card dress-wrapper" id="dressSection">
 
-    <!-- SWITCH PEQUEÑO IZQUIERDA -->
     <div class="dress-switch" id="dressSwitch"></div>
 
     <h2>Dress Code</h2>
@@ -585,7 +552,7 @@ body::before{
   <div class="section-card" id="confirmSection">
     <h2>Confirma tu asistencia</h2>
     <p>
-      Será un honor contar contigo.
+      Será un honor contar contigo en este día tan importante.
     </p>
     <br>
     <button class="btn-shiny" id="confirmButton">
@@ -625,12 +592,14 @@ const confirmButton = document.getElementById("confirmButton");
 const dressSwitch = document.getElementById("dressSwitch");
 const dressContent = document.getElementById("dressContent");
 const familyName = document.getElementById("familyName");
+const mainNames = document.getElementById("mainNames");
+
+let invitationOpened = false;
 
 
 /* =========================
    PERSONALIZACIÓN POR URL
-   ejemplo:
-   ?familia=Familia%20López
+   ?familia=Familia%20López&nombres=Javi%20%26%20Irli
 ========================= */
 
 const params = new URLSearchParams(window.location.search);
@@ -639,7 +608,7 @@ const nombres = params.get("nombres");
 const familia = params.get("familia");
 
 if (nombres) {
-  document.querySelector(".intro-text div").innerHTML = `
+  mainNames.innerHTML = `
     Con amor ${nombres} <br>
     los invitamos a nuestra boda
   `;
@@ -650,69 +619,79 @@ if (familia) {
 }
 
 
-
 /* =========================
    ABRIR SOBRE
 ========================= */
 
 envelope.addEventListener("click", () => {
 
-  createFireworkExplosion();
+  if (invitationOpened) return;
+  invitationOpened = true;
+
+  seal.classList.add("break");
+  createGoldenConfetti();
 
   document.querySelector(".intro-text").classList.add("intro-hide");
   document.querySelector(".envelope-wrapper").classList.add("intro-hide");
 
   setTimeout(() => {
+
     mainContent.classList.add("show");
+
+    bgMusic.volume = 0.6;
     bgMusic.play().catch(()=>{});
+
     video.muted = false;
     video.play().catch(()=>{});
+
+    window.scrollTo({
+      top: mainContent.offsetTop - 20,
+      behavior: "smooth"
+    });
+
   }, 1000);
 
 });
 
+
 /* =========================
-   EXPLOSIÓN TIPO FUEGOS ARTIFICIALES
+   CONFETTI DORADO
 ========================= */
 
-function createFireworkExplosion() {
+function createGoldenConfetti() {
 
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 60; i++) {
 
-    const petal = document.createElement("div");
-    petal.classList.add("petal");
+    const coin = document.createElement("div");
+    coin.classList.add("petal");
 
-    const angle = Math.random() * 2 * Math.PI;
-    const radius = Math.random() * 250 + 100;
+    coin.style.left = Math.random() * 100 + "vw";
+    coin.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    coin.style.transform = `rotate(${Math.random()*360}deg)`;
 
-    const x = Math.cos(angle) * radius;
-    const y = Math.sin(angle) * radius;
-
-    petal.style.setProperty("--x", `${x}px`);
-    petal.style.setProperty("--y", `${y}px`);
-
-    petalContainer.appendChild(petal);
+    petalContainer.appendChild(coin);
 
     setTimeout(() => {
-      petal.remove();
-    }, 2000);
+      coin.remove();
+    }, 6000);
   }
 }
 
 
 /* =========================
    CUENTA REGRESIVA
+   28 MARZO 2026 - 16:00 hrs
 ========================= */
 
-const weddingDate = new Date("2026-12-19T16:00:00").getTime();
+const weddingDate = new Date("2026-03-28T16:00:00").getTime();
 
 function updateCountdown() {
 
   const now = new Date().getTime();
   const distance = weddingDate - now;
 
-  if (distance < 0) {
-    countdownEl.innerHTML = "¡Hoy es el gran día!";
+  if (distance <= 0) {
+    countdownEl.innerHTML = "¡Hoy es el gran día! 💍✨";
     return;
   }
 
@@ -736,7 +715,11 @@ updateCountdown();
 ========================= */
 
 mapButton.addEventListener("click", () => {
-  window.open("https://maps.app.goo.gl/", "_blank");
+
+  const mapsURL = "https://www.google.com/maps/search/?api=1&query=Plaza+City+Shops+Valle+Dorado+Tlalnepantla";
+
+  window.open(mapsURL, "_blank");
+
 });
 
 
@@ -746,11 +729,16 @@ mapButton.addEventListener("click", () => {
 
 confirmButton.addEventListener("click", () => {
 
+  const telefono = "521XXXXXXXXXX"; // <-- PON AQUÍ TU NÚMERO REAL
+
   const mensaje = encodeURIComponent(
-    "Hola Javi & Irli, confirmo mi asistencia a su boda 💍✨"
+    "Hola Javi & Irli 💍✨ Confirmo mi asistencia a su boda el 28 de marzo de 2026."
   );
 
-  window.open(`https://wa.me/521XXXXXXXXXX?text=${mensaje}`, "_blank");
+  const url = `https://wa.me/${telefono}?text=${mensaje}`;
+
+  window.open(url, "_blank");
+
 });
 
 
@@ -793,7 +781,7 @@ dressSwitch.addEventListener("click", () => {
 
 
 /* =========================
-   ANIMACIÓN DE SECCIONES AL HACER SCROLL
+   ANIMACIÓN AL HACER SCROLL
 ========================= */
 
 const sections = document.querySelectorAll(".section-card, .closing-card");
@@ -802,7 +790,7 @@ const observer = new IntersectionObserver(entries => {
 
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-     entry.target.classList.add("visible");
+      entry.target.classList.add("visible");
     }
   });
 
@@ -816,3 +804,4 @@ sections.forEach(section => {
 
 </body>
 </html>
+
