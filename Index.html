@@ -14,8 +14,9 @@
   --dorado:#C6A85B;
   --dorado-suave:#E7D49A;
   --rosa:#f4c2d7;
-  --fondo-oscuro:rgba(0,0,0,0.55);
-  --card-bg:rgba(0,0,0,0.55);
+  --fondo-oscuro:rgba(0,0,0,0.65); /* <<< CORREGIDO Un poco más oscuro para mejor legibilidad */
+  --card-bg:rgba(0,0,0,0.65); /* <<< CORREGIDO */
+  --texto-claro: #fff9e6; /* <<< CORREGIDO Texto más claro */
 }
 
 /* ===============================
@@ -29,10 +30,9 @@
 body{
   margin:0;
   font-family:'Cormorant Garamond', serif;
-  color:var(--dorado);
+  color:var(--texto-claro); /* <<< CORREGIDO */
   text-align:center;
   overflow-x:hidden;
-
   background: url("fondo.png") no-repeat center center fixed;
   background-size:cover;
 }
@@ -42,7 +42,7 @@ body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.45);
+  background:rgba(0,0,0,0.6); /* <<< CORREGIDO Un poco más oscuro */
   z-index:-1;
 }
 
@@ -56,7 +56,8 @@ body::before{
   font-size:30px;
   line-height:1.4;
   font-weight:500;
-  text-shadow:0 2px 8px rgba(0,0,0,.6);
+  text-shadow:0 2px 10px rgba(0,0,0,.8); /* <<< CORREGIDO */
+  color: var(--dorado-suave); /* <<< CORREGIDO */
 }
 
 .intro-text .familia{
@@ -86,7 +87,7 @@ body::before{
   cursor:pointer;
   background:linear-gradient(145deg,#dcdcdc,#f8f8f8);
   border:2px solid var(--dorado);
-  box-shadow:0 20px 40px rgba(0,0,0,.5);
+  box-shadow:0 20px 40px rgba(0,0,0,.7);
   transition:transform .6s ease;
   border-radius:4px;
 }
@@ -149,7 +150,7 @@ body::before{
 }
 
 /* ===============================
-   CONFETTI DORADO (ANTES PÉTALOS)
+   CONFETTI DORADO
 =================================*/
 
 .petal{
@@ -162,6 +163,7 @@ body::before{
   opacity:.9;
   pointer-events:none;
   animation:fall linear forwards;
+  z-index: 10; /* <<< CORREGIDO Para que esté sobre todo */
 }
 
 @keyframes fall{
@@ -209,13 +211,14 @@ body::before{
   padding:15px;
   border:2px solid var(--dorado);
   border-radius:25px;
-  box-shadow:0 0 40px rgba(198,168,91,.4);
+  box-shadow:0 0 40px rgba(198,168,91,.5);
   background:var(--card-bg);
 }
 
 .video-container video{
   width:100%;
   border-radius:18px;
+  display: block; /* <<< CORREGIDO Elimina espacio extra abajo del video */
 }
 
 /* ===============================
@@ -231,6 +234,7 @@ body::before{
   width:100%;
   animation:bounce 2s infinite;
   transition:opacity .6s ease;
+  color: var(--dorado-suave); /* <<< CORREGIDO */
 }
 
 .scroll-hint.show{
@@ -253,8 +257,8 @@ body::before{
   border-radius:25px;
   background:var(--card-bg);
   border:1px solid var(--dorado);
-  backdrop-filter:blur(6px);
-  box-shadow:0 0 30px rgba(0,0,0,.5);
+  backdrop-filter:blur(8px); /* <<< CORREGIDO Un poco más de blur */
+  box-shadow:0 0 30px rgba(0,0,0,.7);
   opacity:0;
   transform:translateY(40px);
   transition:all .8s ease;
@@ -267,16 +271,18 @@ body::before{
 
 .section-card h2{
   font-family:'Great Vibes', cursive;
-  font-size:36px;
+  font-size:42px; /* <<< CORREGIDO Un poco más grande */
   font-weight:400;
   margin-bottom:25px;
   letter-spacing:1px;
+  color: var(--dorado); /* <<< CORREGIDO */
 }
 
 .section-card p,
 .section-card div{
   font-size:20px;
   line-height:1.8;
+  color: var(--texto-claro); /* <<< CORREGIDO */
 }
 
 /* ===============================
@@ -287,14 +293,15 @@ body::before{
   padding:14px 30px;
   border:none;
   border-radius:40px;
-  font-size:16px;
+  font-size:18px; /* <<< CORREGIDO */
   font-weight:600;
   cursor:pointer;
   background:linear-gradient(90deg,var(--dorado),var(--dorado-suave));
-  color:#111;
+  color:#222; /* <<< CORREGIDO */
   position:relative;
   overflow:hidden;
   transition:transform .3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* <<< CORREGIDO */
 }
 
 .btn-shiny:hover{
@@ -314,7 +321,7 @@ body::before{
 
 @keyframes shine{
   0%{left:-100%;}
-  50%{left:100%;}
+  20%{left:100%;} /* <<< CORREGIDO Más rápido */
   100%{left:100%;}
 }
 
@@ -323,8 +330,9 @@ body::before{
 =================================*/
 
 .countdown{
-  font-size:22px;
+  font-size:24px; /* <<< CORREGIDO */
   letter-spacing:1px;
+  font-weight: 600;
 }
 
 /* ===============================
@@ -338,29 +346,31 @@ body::before{
 
 .dress-switch{
   position:absolute;
-  top:-10px;
-  left:0;
-  width:45px;
-  height:22px;
+  top:-15px; /* <<< CORREGIDO */
+  right:10px; /* <<< CORREGIDO Lo moví a la derecha */
+  left: auto; /* <<< CORREGIDO */
+  width:55px; /* <<< CORREGIDO */
+  height:26px; /* <<< CORREGIDO */
   background:#555;
   border-radius:20px;
   cursor:pointer;
+  border: 1px solid var(--dorado); /* <<< CORREGIDO */
 }
 
 .dress-switch::after{
   content:"";
-  width:18px;
-  height:18px;
+  width:22px; /* <<< CORREGIDO */
+  height:22px; /* <<< CORREGIDO */
   border-radius:50%;
   background:var(--dorado);
   position:absolute;
-  top:2px;
+  top:1px;
   left:2px;
   transition:.3s ease;
 }
 
 .dress-switch.active::after{
-  left:25px;
+  left:30px; /* <<< CORREGIDO */
 }
 
 /* ===============================
@@ -374,8 +384,19 @@ body::before{
   border-radius:30px;
   border:1px solid var(--dorado);
   background:var(--card-bg);
-  box-shadow:0 0 40px rgba(0,0,0,.6);
-  font-size:20px;
+  backdrop-filter:blur(8px); /* <<< CORREGIDO Consistencia */
+  box-shadow:0 0 40px rgba(0,0,0,.7);
+  font-size:22px; /* <<< CORREGIDO */
+  line-height: 1.6;
+  color: var(--dorado-suave); /* <<< CORREGIDO */
+  opacity:0;
+  transform:translateY(40px);
+  transition:all .8s ease;
+}
+
+.closing-card.visible{
+  opacity:1;
+  transform:translateY(0);
 }
 
 /* ===============================
@@ -385,15 +406,14 @@ body::before{
 @media(max-width:600px){
 
 .intro-text{
-  padding:80px 20px 30px;
-  font-size:34px;
-  line-height:1.6;
+  padding:40px 20px 20px; /* <<< CORREGIDO */
+  font-size:28px; /* <<< CORREGIDO */
+  line-height:1.5;
 }
 
 .intro-text .familia{
-  margin-top:20px;
-  font-size:24px;
-  letter-spacing:2px;
+  margin-top:15px;
+  font-size:22px;
 }
 
 .section-card{
@@ -463,10 +483,13 @@ body::before{
 
   <!-- =========================
        VIDEO (SIEMPRE ARRIBA)
+       <<< CORREGIDO: Cambié 'video.mp4' por 'Video.mp4' para que coincida con tu audio. 
+       Asegúrate que el archivo en tu carpeta se llame EXACTAMENTE 'Video.mp4' (con V mayúscula).
   ========================= -->
   <div class="video-container">
     <video id="weddingVideo" playsinline loop muted autoplay>
-      <source src="video.mp4" type="video/mp4">
+      <source src="Video.mp4" type="video/mp4">
+      Tu navegador no soporta el elemento de video.
     </video>
   </div>
 
@@ -615,11 +638,19 @@ envelope.addEventListener("click", () => {
     mainContent.classList.add("show");
 
     bgMusic.volume = 0.6;
-    bgMusic.play().catch(()=>{});
+    bgMusic.play().catch(e => console.log("Audio no pudo reproducirse:", e));
 
+    // Quitar el mute y asegurar reproducción del video
     video.muted = false;
-    video.play().catch(()=>{});
+    video.play().catch(e => console.log("Video no pudo reproducirse:", e));
 
+    // Mostrar el indicador de scroll
+    scrollHint.classList.add("show");
+
+    // Iniciar el observer para las secciones AHORA que el contenido es visible
+    startObserver();
+
+    // Hacer scroll suave hacia el contenido
     window.scrollTo({
       top: mainContent.offsetTop - 20,
       behavior: "smooth"
@@ -635,20 +666,15 @@ envelope.addEventListener("click", () => {
 ========================= */
 
 function createGoldenConfetti() {
-
   for (let i = 0; i < 60; i++) {
-
     const coin = document.createElement("div");
     coin.classList.add("petal");
-
     coin.style.left = Math.random() * 100 + "vw";
     coin.style.animationDuration = (Math.random() * 3 + 3) + "s";
     coin.style.transform = `rotate(${Math.random()*360}deg)`;
-
     petalContainer.appendChild(coin);
-
     setTimeout(() => {
-      coin.remove();
+      if (coin.parentNode) coin.remove();
     }, 6000);
   }
 }
@@ -691,21 +717,19 @@ updateCountdown();
 ========================= */
 
 mapButton.addEventListener("click", () => {
-
   const mapsURL = "https://www.google.com/maps/search/?api=1&query=Plaza+City+Shops+Valle+Dorado+Tlalnepantla";
-
   window.open(mapsURL, "_blank");
-
 });
 
 
 /* =========================
    CONFIRMAR WHATSAPP
+   <<< CORREGIDO: Añadí el marcador para el número
 ========================= */
 
 confirmButton.addEventListener("click", () => {
 
-  const telefono = "521XXXXXXXXXX"; // <-- PON AQUÍ TU NÚMERO REAL
+  const telefono = "521XXXXXXXXXX"; // <<<--- PON AQUÍ TU NÚMERO REAL (ejemplo: 5215551234567)
 
   const mensaje = encodeURIComponent(
     "Hola Javi & Irli 💍✨ Confirmo mi asistencia a su boda el 28 de marzo de 2026."
@@ -758,23 +782,27 @@ dressSwitch.addEventListener("click", () => {
 
 /* =========================
    ANIMACIÓN AL HACER SCROLL
+   <<< CORREGIDO: Esta función se llama DESPUÉS de abrir el sobre
 ========================= */
 
-const sections = document.querySelectorAll(".section-card, .closing-card");
+function startObserver() {
+  const sections = document.querySelectorAll(".section-card, .closing-card");
 
-const observer = new IntersectionObserver(entries => {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" }); // <<< CORREGIDO pequeño ajuste
 
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-    }
+  sections.forEach(section => {
+    observer.observe(section);
   });
+}
 
-}, { threshold: 0.2 });
-
-sections.forEach(section => {
-  observer.observe(section);
-});
+// El observer ya no se inicia aquí. Se inicia desde dentro del evento del sobre.
+// startObserver(); <<< Esta línea ha sido eliminada
 
 </script>
 </body>
