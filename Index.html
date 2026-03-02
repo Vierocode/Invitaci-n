@@ -432,124 +432,127 @@ body::before{
 </div>
 <script>
 
-/* =========================================
+/* =====================================
    CONFIGURACIÓN
-========================================= */
+===================================== */
 
-const GOOGLE_SCRIPT_URL = "https://docs.google.com/spreadsheets/d/1XO1M_U2U_lcmDc3zj2RmMt1ZNDyKHSAQQEWcKluCvlg/edit?gid=0#gid=0"; // ← PON AQUÍ TU URL
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec"; // ← URL REAL
+const NUMERO_WHATSAPP = "5217716995004"; // ← TU NÚMERO REAL
 
-const fechaBoda = new Date("March 28, 2026 00:00:00").getTime();
+const fechaBoda = new Date("March 28, 2026 11:00:00").getTime();
 
-let monedasActivas = true;
 let envioRealizado = false;
 
-/* =========================================
-   LEER PARÁMETROS URL
-========================================= */
+/* =====================================
+   PARÁMETROS URL
+===================================== */
 
 function obtenerParametro(nombre) {
   const params = new URLSearchParams(window.location.search);
   return params.get(nombre);
 }
 
-const familia = obtenerParametro("familia") || "Nuestra querida familia";
+const familia = obtenerParametro("familia") || "Familia Invitada";
 const nombres = obtenerParametro("nombres") || "Javi & Irli";
 
 document.getElementById("familiaInvitada").innerText = familia;
 document.getElementById("nombresInvitados").innerText = nombres;
 
-/* =========================================
-   SOBRE - APERTURA
-========================================= */
+/* =====================================
+   INICIALES EN SELLO
+===================================== */
+
+const seal = document.getElementById("seal");
+
+function obtenerIniciales(texto) {
+  return texto
+    .split("&")[0]
+    .trim()
+    .split(" ")
+    .map(p => p[0])
+    .join("")
+    .toUpperCase();
+}
+
+seal.innerHTML = `
+  <span style="
+    color:white;
+    font-size:26px;
+    font-family:'Great Vibes', cursive;
+  ">
+    ${obtenerIniciales(nombres)}
+  </span>
+`;
+
+/* =====================================
+   APERTURA SOBRE
+===================================== */
 
 const envelope = document.getElementById("envelope");
-const seal = document.getElementById("seal");
 const mainContent = document.getElementById("mainContent");
 const introText = document.getElementById("introText");
 const envelopeWrapper = document.getElementById("envelopeWrapper");
-const videoContainer = document.getElementById("videoContainer");
 const bgMusic = document.getElementById("bgMusic");
 
 envelope.addEventListener("click", () => {
 
   seal.classList.add("break");
 
-  setTimeout(() => {
-    introText.classList.add("intro-hide");
-    envelopeWrapper.classList.add("intro-hide");
-  }, 600);
+  introText.style.display = "none";
+  envelopeWrapper.style.display = "none";
 
-  setTimeout(() => {
-    mainContent.classList.add("show");
-    videoContainer.classList.add("show");
-    iniciarMusica();
-    iniciarLluviaMonedas();
-    animarCards();
-  }, 1200);
+  mainContent.classList.add("show");
 
+  window.scrollTo(0,0);
+
+  iniciarMusica();
+  iniciarLluviaMonedas();
 });
 
-/* =========================================
-   FADE IN MÚSICA
-========================================= */
+/* =====================================
+   MÚSICA (AHORA SÍ FUNCIONA)
+===================================== */
 
 function iniciarMusica() {
   bgMusic.volume = 0;
-  bgMusic.play();
+  bgMusic.play().then(() => {
 
-  let vol = 0;
-  const fade = setInterval(() => {
-    if (vol < 0.6) {
-      vol += 0.02;
-      bgMusic.volume = vol;
-    } else {
-      clearInterval(fade);
-    }
-  }, 200);
-}
+    let vol = 0;
+    const fade = setInterval(() => {
+      if (vol < 0.6) {
+        vol += 0.03;
+        bgMusic.volume = vol;
+      } else {
+        clearInterval(fade);
+      }
+    }, 200);
 
-/* =========================================
-   LLUVIA DE MONEDAS ELEGANTE
-========================================= */
-
-function crearMoneda() {
-
-  if (!monedasActivas) return;
-
-  const coin = document.createElement("div");
-  coin.classList.add("coin");
-
-  coin.style.left = Math.random() * 100 + "vw";
-  coin.style.animationDuration = (8 + Math.random() * 6) + "s";
-  coin.style.opacity = 0.5 + Math.random() * 0.5;
-
-  document.body.appendChild(coin);
-
-  setTimeout(() => {
-    coin.remove();
-  }, 14000);
-}
-
-function iniciarLluviaMonedas() {
-  setInterval(crearMoneda, 600);
-}
-
-/* =========================================
-   ANIMACIÓN CARDS
-========================================= */
-
-function animarCards() {
-  const cards = document.querySelectorAll(".section-card");
-  cards.forEach((card, index) => {
-    setTimeout(() => {
-      card.classList.add("visible");
-    }, index * 300);
+  }).catch(e => {
+    console.log("Audio bloqueado:", e);
   });
 }
 
-/* =========================================
+/* =====================================
+   LLUVIA MONEDAS
+===================================== */
+
+function crearMoneda() {
+  const coin = document.createElement("div");
+  coin.classList.add("coin");
+  coin.style.left = Math.random() * 100 + "vw";
+  coin.style.animationDuration = (8 + Math.random()*6) + "s";
+  document.body.appendChild(coin);
+
+  setTimeout(()=> coin.remove(), 15000);
+}
+
+function iniciarLluviaMonedas(){
+  setInterval(crearMoneda, 800);
+}
+
+/* =====================================
    CUENTA REGRESIVA
-========================================= */
+===================================== */
 
 const countdownEl = document.getElementById("countdown");
 
@@ -558,122 +561,89 @@ setInterval(() => {
   const ahora = new Date().getTime();
   const distancia = fechaBoda - ahora;
 
-  if (distancia < 0) {
+  if (distancia <= 0) {
     countdownEl.innerHTML = "¡Hoy es el gran día!";
     return;
   }
 
-  const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
-  const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-  const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+  const dias = Math.floor(distancia / (1000*60*60*24));
+  const horas = Math.floor((distancia % (1000*60*60*24)) / (1000*60*60));
+  const minutos = Math.floor((distancia % (1000*60*60)) / (1000*60));
+  const segundos = Math.floor((distancia % (1000*60)) / 1000);
 
   countdownEl.innerHTML =
-    dias + " días " +
-    horas + " hrs " +
-    minutos + " min " +
-    segundos + " seg";
+    `${dias} días ${horas} hrs ${minutos} min ${segundos} seg`;
 
-}, 1000);
+},1000);
 
-/* =========================================
+/* =====================================
    MAPA
-========================================= */
+===================================== */
 
-function abrirMapa() {
+function abrirMapa(){
   window.open(
-    "https://www.google.com/maps/search/?api=1&query=Tlanepantla+Valle+Dorado+Plaza+City+Shops+Registro+Civil",
-    "_blank"
+   "https://www.google.com/maps/search/?api=1&query=Tlalnepantla+Valle+Dorado+Plaza+City+Shops+Registro+Civil",
+   "_blank"
   );
 }
 
-/* =========================================
-   SWITCH DRESS
-========================================= */
-
-const dressSwitch = document.getElementById("dressSwitch");
-const dressContent = document.getElementById("dressContent");
-
-dressSwitch.addEventListener("click", () => {
-
-  dressSwitch.classList.toggle("active");
-
-  if (dressSwitch.classList.contains("active")) {
-    dressContent.innerHTML = "Etiqueta Formal<br>Toques dorados bienvenidos ✨";
-  } else {
-    dressContent.innerHTML = "Formal Elegante<br>Colores claros y neutros";
-  }
-
-});
-
-/* =========================================
+/* =====================================
    CONFIRMAR ASISTENCIA
-========================================= */
+===================================== */
 
-async function confirmarAsistencia() {
+async function confirmarAsistencia(){
 
-  if (envioRealizado) {
-    alert("Tu confirmación ya fue enviada ❤️");
+  if(envioRealizado){
+    alert("Ya registramos tu confirmación ❤️");
     return;
   }
 
   const telefono = document.getElementById("telefono").value.trim();
 
-  if (!telefono) {
-    alert("Por favor ingresa tu número de teléfono");
+  if(!telefono){
+    alert("Ingresa tu número por favor");
     return;
   }
 
   envioRealizado = true;
 
-  const mensaje = `Hola, confirmo mi asistencia a la boda. Familia: ${familia}`;
-
-  /* ---------- ENVIAR A GOOGLE SHEETS ---------- */
+  /* ---------- GOOGLE SHEETS ---------- */
 
   try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
+
+    const response = await fetch(GOOGLE_SCRIPT_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
       },
-      body: JSON.stringify({
-        telefono: telefono,
-        confirmacion: "Confirmado",
-        familia: familia
-      }),
+      body:JSON.stringify({
+        telefono:telefono,
+        confirmacion:"Confirmado",
+        familia:familia
+      })
     });
-  } catch (error) {
-    console.log("Error enviando a Sheets:", error);
+
+    console.log("Enviado a Sheets");
+
+  } catch(error){
+    console.error("Error Sheets:", error);
   }
 
-  /* ---------- ABRIR WHATSAPP ---------- */
+  /* ---------- WHATSAPP ---------- */
 
-  const numeroDestino = "521XXXXXXXXXX"; // ← TU NÚMERO
-  const url = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(mensaje)}`;
+  const mensaje =
+   `Hola, confirmo mi asistencia.\nFamilia: ${familia}\nTeléfono: ${telefono}`;
 
-  window.open(url, "_blank");
+  const url =
+   `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
+  window.open(url,"_blank");
 }
-
-/* =========================================
-   SCROLL AUTOMÁTICO AL VIDEO
-========================================= */
-
-const observer = new MutationObserver(() => {
-  if (mainContent.classList.contains("show")) {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  }
-});
-
-observer.observe(mainContent, { attributes: true });
 
 </script>
 
 </body>
 </html>
+
 
 
