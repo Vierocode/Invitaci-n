@@ -638,9 +638,10 @@ body::before{
    CONFIGURACIÓN
 ========================= */
 const CONFIG = {
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec',
+  // URL de tu última implementación (exec)
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyPw15Pf3IpDGUHVX2bBIWEIT3d3RCxo_z3TGOP_Db-eZj_0hxMJtSjoFXYtG70I8np/exec',
   WHATSAPP_NUMBER: '5217716995004',
-  DEBUG: false // ¡Importante! DEBUG en false para usuarios normales
+  DEBUG: false 
 };
 
 /* =========================
@@ -669,7 +670,6 @@ let debugLogsArray = [];
 
 /* =========================
    DETECTAR MODO DEBUG
-   (Activar solo si #debug está en la URL)
 ========================= */
 const urlHash = window.location.hash;
 const isDebugMode = urlHash === '#debug' || urlHash === '#debugmode';
@@ -677,168 +677,101 @@ const isDebugMode = urlHash === '#debug' || urlHash === '#debugmode';
 if (isDebugMode) {
   CONFIG.DEBUG = true;
   document.body.classList.add('debug-mode');
-  console.log('🔧 MODO DEBUG ACTIVADO - Panel visible');
-} else {
-  console.log('🔒 Modo normal - Panel oculto');
+  console.log('🔧 MODO DEBUG ACTIVADO');
 }
 
 /* =========================
-   UTILERÍA DE LOGS
-   (Solo guarda en consola, no muestra panel a usuarios normales)
+   UTILERÍA DE LOGS Y NOTIFICACIONES
 ========================= */
-function addLog(message, type = 'info') {
+function addLog(message) {
   const timestamp = new Date().toLocaleTimeString();
   const logEntry = `[${timestamp}] ${message}`;
-  
-  // Siempre a consola del navegador (solo visible para desarrolladores)
   console.log(`🔍 ${logEntry}`);
   
-  // Si estamos en modo debug, mostrar en el panel
   if (CONFIG.DEBUG && debugLogs) {
     debugLogsArray.unshift(logEntry);
-    
-    if (debugLogsArray.length > 10) {
-      debugLogsArray.pop();
-    }
-    
+    if (debugLogsArray.length > 10) debugLogsArray.pop();
     debugLogs.innerHTML = debugLogsArray.map(log => {
-      const timePart = log.split(']')[0] + ']';
-      const msgPart = log.split(']')[1] || '';
-      return `<div class="debug-log"><span class="debug-time">${timePart}</span>${msgPart}</div>`;
+      const parts = log.split(']');
+      return `<div class="debug-log"><span class="debug-time">${parts[0]}]</span>${parts[1]}</div>`;
     }).join('');
   }
 }
 
-/* =========================
-   UTILERÍA DE NOTIFICACIONES
-========================= */
-function showNotification(message, duration = 3000) {
+function showNotification(message) {
   notification.style.display = 'block';
   notification.textContent = message;
   notification.className = 'notification';
-  
-  setTimeout(() => {
-    notification.style.display = 'none';
-  }, duration);
+  setTimeout(() => { notification.style.display = 'none'; }, 4000);
 }
 
 /* =========================
    PERSONALIZACIÓN POR URL
 ========================= */
 const params = new URLSearchParams(window.location.search);
-const nombres = params.get("nombres");
-const familia = params.get("familia");
+const nombresParam = params.get("nombres");
+const familiaParam = params.get("familia");
 
-// IMPORTANTE: Si no hay familia en la URL, usar un valor por defecto pero registrar que falta
-if (!familia) {
-  console.warn('⚠️ ADVERTENCIA: No se especificó familia en la URL');
-  addLog('⚠️ No hay familia en URL');
+const familiaValue = familiaParam || 'Familia Invitada';
+
+if (nombresParam) {
+  mainNames.innerHTML = `Con amor ${nombresParam} <br> los invitamos a nuestra boda`;
 }
 
-const familiaValue = familia || 'Familia no especificada';
-
-addLog(`URL params - Familia: ${familiaValue}, Nombres: ${nombres || 'no especificados'}`);
-
-if (nombres) {
-  mainNames.innerHTML = `
-    Con amor ${nombres} <br>
-    los invitamos a nuestra boda
-  `;
-}
-
-if (familia) {
-  familyName.textContent = familia;
-} else {
-  familyName.textContent = 'Familia Invitada';
-}
+familyName.textContent = familiaValue;
+addLog(`Invitación cargada para: ${familiaValue}`);
 
 /* =========================
-   REGISTRAR VISTA EN SPREADSHEET
+   ENVÍO DE DATOS A GOOGLE SHEETS
 ========================= */
+// Función maestra para enviar datos sin problemas de CORS
+function sendToGoogle(queryString) {
+  const fullUrl = `${CONFIG.SCRIPT_URL}?${queryString}`;
+  // Usamos el método de Imagen para asegurar que la petición salga sin bloqueos de navegador
+  const tracker = new Image();
+  tracker.src = fullUrl;
+  addLog(`Enviando a Sheets: ${queryString.split('&')[0]}`);
+}
+
 async function registerView() {
-  addLog('Intentando registrar vista...');
-  
-  try {
-    const viewId = Date.now().toString();
-    // Asegurarnos de enviar la familia aunque sea vacía
-    const familiaToSend = familia || 'Familia no especificada';
-    
-    const url = `${CONFIG.SCRIPT_URL}?action=register_view&familia=${encodeURIComponent(familiaToSend)}&nombres=${encodeURIComponent(nombres || '')}&viewId=${viewId}`;
-    
-    addLog(`Enviando petición a: ${url.substring(0, 100)}...`);
-    
-    await fetch(url, {
-      method: 'GET',
-      mode: 'no-cors'
-    });
-    
-    addLog('✅ Petición de vista enviada');
-    
-  } catch (error) {
-    addLog(`❌ Error registrando vista: ${error.message}`, 'error');
-  }
+  const viewId = Date.now().toString();
+  const query = `action=register_view&familia=${encodeURIComponent(familiaValue)}&nombres=${encodeURIComponent(nombresParam || '')}&viewId=${viewId}`;
+  sendToGoogle(query);
 }
 
-/* =========================
-   REGISTRAR CONFIRMACIÓN
-========================= */
 async function registerConfirmation(telefono) {
-  addLog(`Intentando registrar confirmación para teléfono: ${telefono}`);
-  
-  try {
-    // Asegurarnos de enviar la familia
-    const familiaToSend = familia || 'Familia no especificada';
-    
-    const url = `${CONFIG.SCRIPT_URL}?action=confirm_assistance&familia=${encodeURIComponent(familiaToSend)}&telefono=${encodeURIComponent(telefono)}`;
-    
-    addLog(`Enviando confirmación a: ${url.substring(0, 100)}...`);
-    
-    await fetch(url, {
-      method: 'GET',
-      mode: 'no-cors'
-    });
-    
-    addLog('✅ Petición de confirmación enviada');
-    showNotification('✅ Confirmación registrada. ¡Gracias!');
-    
-  } catch (error) {
-    addLog(`❌ Error registrando confirmación: ${error.message}`, 'error');
-    showNotification('❌ Error al registrar, pero el mensaje fue enviado');
-  }
+  const query = `action=confirm_assistance&familia=${encodeURIComponent(familiaValue)}&telefono=${encodeURIComponent(telefono)}`;
+  sendToGoogle(query);
+  addLog('✅ Registro de confirmación enviado');
 }
 
 /* =========================
-   ABRIR SOBRE
+   EVENTOS DE INTERACCIÓN
 ========================= */
+
+// 1. Abrir Sobre
 envelope.addEventListener("click", async () => {
-  addLog('📬 Sobre clickeado');
-
-  if (invitationOpened) {
-    addLog('Sobre ya estaba abierto, ignorando');
-    return;
-  }
-  
+  if (invitationOpened) return;
   invitationOpened = true;
-  addLog('Abriendo sobre...');
-
+  
+  addLog('📬 Abriendo sobre...');
   seal.classList.add("break");
   createGoldenConfetti();
   
-  // Registrar vista
+  // Registrar la vista en el Excel
   await registerView();
 
   document.querySelector(".intro-text").classList.add("intro-hide");
   document.querySelector(".envelope-wrapper").classList.add("intro-hide");
 
   setTimeout(() => {
-    addLog('Mostrando contenido principal');
     mainContent.classList.add("show");
-
-    bgMusic.volume = 0.6;
-    bgMusic.play().catch(e => addLog(`Audio error: ${e.message}`));
+    
+    bgMusic.volume = 0.5;
+    bgMusic.play().catch(e => console.log("Audio requiere interacción"));
 
     video.muted = false;
-    video.play().catch(e => addLog(`Video error: ${e.message}`));
+    video.play().catch(e => console.log("Video en espera"));
 
     scrollHint.classList.add("show");
     startObserver();
@@ -847,153 +780,94 @@ envelope.addEventListener("click", async () => {
       top: mainContent.offsetTop - 20,
       behavior: "smooth"
     });
-
   }, 1000);
 });
 
-/* =========================
-   CONFETTI DORADO
-========================= */
-function createGoldenConfetti() {
-  for (let i = 0; i < 60; i++) {
-    const coin = document.createElement("div");
-    coin.classList.add("petal");
-    coin.style.left = Math.random() * 100 + "vw";
-    coin.style.animationDuration = (Math.random() * 3 + 3) + "s";
-    coin.style.transform = `rotate(${Math.random()*360}deg)`;
-    petalContainer.appendChild(coin);
-    setTimeout(() => {
-      if (coin.parentNode) coin.remove();
-    }, 6000);
-  }
-}
-
-/* =========================
-   CUENTA REGRESIVA
-========================= */
-const weddingDate = new Date("2026-03-28T16:00:00").getTime();
-
-function updateCountdown() {
-  const now = new Date().getTime();
-  const distance = weddingDate - now;
-
-  if (distance <= 0) {
-    countdownEl.innerHTML = "¡Hoy es el gran día! 💍✨";
-    return;
-  }
-
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  countdownEl.innerHTML = `
-    ${days} días <br>
-    ${hours} hrs ${minutes} min ${seconds} seg
-  `;
-}
-
-setInterval(updateCountdown, 1000);
-updateCountdown();
-
-/* =========================
-   GOOGLE MAPS
-========================= */
-mapButton.addEventListener("click", () => {
-  const mapsURL = "https://www.google.com/maps/search/?api=1&query=Plaza+City+Shops+Valle+Dorado+Tlalnepantla";
-  window.open(mapsURL, "_blank");
-  addLog('Mapa abierto');
-});
-
-/* =========================
-   CONFIRMAR WHATSAPP
-========================= */
+// 2. Confirmar por WhatsApp
 confirmButton.addEventListener("click", async () => {
-  addLog('📱 Botón de confirmación clickeado');
+  addLog('📱 Click en Confirmación');
   
-  const telefonoInvitado = params.get("telefono") || `invitado_${Date.now()}`;
-  addLog(`Teléfono invitado: ${telefonoInvitado}`);
-  
-  // Incluir la familia en el mensaje de WhatsApp
-  const familiaMsg = familia ? familia : 'Familia Invitada';
+  const idInvitado = params.get("telefono") || `web_${Date.now()}`;
   
   const mensaje = encodeURIComponent(
     `Hola Javi & Irli 💍✨\n\n` +
-    `Familia: ${familiaMsg}\n` +
+    `Familia: ${familiaValue}\n` +
     `Confirmo mi asistencia a su boda el 28 de marzo de 2026.\n\n` +
     `¡Muchas felicidades! 🎉`
   );
 
-  const url = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${mensaje}`;
+  const waUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${mensaje}`;
   
-  addLog('Abriendo WhatsApp...');
-  window.open(url, "_blank");
+  // Primero registramos en el Excel
+  await registerConfirmation(idInvitado);
   
-  await registerConfirmation(telefonoInvitado);
-  showNotification('📱 Mensaje preparado. Por favor envíalo desde WhatsApp.');
+  // Pequeña pausa para asegurar el envío del registro antes de salir de la página
+  setTimeout(() => {
+    window.open(waUrl, "_blank");
+    showNotification('✅ ¡Gracias! Se ha abierto WhatsApp para enviar tu mensaje.');
+  }, 300);
 });
 
 /* =========================
-   DRESS CODE SWITCH
+   FUNCIONES DE APOYO (Visuales)
 ========================= */
-let showingMen = true;
 
+function createGoldenConfetti() {
+  for (let i = 0; i < 60; i++) {
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    petal.style.transform = `rotate(${Math.random()*360}deg)`;
+    petalContainer.appendChild(petal);
+    setTimeout(() => petal.remove(), 6000);
+  }
+}
+
+const weddingDate = new Date("2026-03-28T16:00:00").getTime();
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = weddingDate - now;
+  if (distance <= 0) {
+    countdownEl.innerHTML = "¡Hoy es el gran día! 💍✨";
+    return;
+  }
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  countdownEl.innerHTML = `${days} días <br> ${hours} hrs ${minutes} min ${seconds} seg`;
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+mapButton.addEventListener("click", () => {
+  window.open("https://maps.app.goo.gl/uXpTfPzX6rC1V5Y88", "_blank");
+});
+
+let showingMen = true;
 dressSwitch.addEventListener("click", () => {
   showingMen = !showingMen;
-
+  dressSwitch.classList.toggle("active");
   if (showingMen) {
-    dressContent.innerHTML = `
-      👔 Hombres:<br><br>
-      • Traje formal oscuro<br>
-      • Camisa blanca o beige<br>
-      • Corbata o moño elegante<br>
-      • Zapato formal negro o café
-    `;
-    dressSwitch.classList.remove("active");
-    addLog('Dress code cambiado a hombres');
+    dressContent.innerHTML = `👔 Hombres:<br><br>• Traje formal oscuro<br>• Camisa blanca o beige<br>• Corbata o moño elegante<br>• Zapato formal negro o café`;
   } else {
-    dressContent.innerHTML = `
-      👗 Mujeres:<br><br>
-      • Vestido formal largo o midi<br>
-      • Colores elegantes (beige, verde, vino, azul marino)<br>
-      • Tacón o zapatilla formal<br>
-      • Accesorios delicados
-    `;
-    dressSwitch.classList.add("active");
-    addLog('Dress code cambiado a mujeres');
+    dressContent.innerHTML = `👗 Mujeres:<br><br>• Vestido formal largo o midi<br>• Colores elegantes (beige, verde, vino, azul marino)<br>• Tacón o zapatilla formal<br>• Accesorios delicados`;
   }
 });
 
-/* =========================
-   ANIMACIÓN AL HACER SCROLL
-========================= */
 function startObserver() {
   const sections = document.querySelectorAll(".section-card, .closing-card");
-
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-      }
+      if (entry.isIntersecting) entry.target.classList.add("visible");
     });
-  }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" });
-
-  sections.forEach(section => {
-    observer.observe(section);
-  });
-  
-  addLog('Observer de scroll iniciado');
+  }, { threshold: 0.2 });
+  sections.forEach(s => observer.observe(s));
 }
 
-// Log inicial
-addLog('🚀 Página cargada');
-addLog(`URL completa: ${window.location.href}`);
-
-// Si no hay familia en URL, mostrar advertencia en consola pero no al usuario
-if (!familia) {
-  console.warn('⚠️ IMPORTANTE: Esta invitación no tiene familia especificada en la URL. Los registros aparecerán como "Familia no especificada"');
-  console.warn('Ejemplo de URL correcta: https://tusitio.com/?familia=Familia%20López&nombres=Javi%20%26%20Irli');
-}
+addLog('🚀 Sistema listo');
 </script>
 </body>
 </html>
+
