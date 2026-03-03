@@ -431,6 +431,45 @@ body::before{
 }
 
 /* ===============================
+   PANEL DE DEPURACIÓN (OCULTO POR DEFECTO)
+   Solo visible si se activa manualmente
+=================================*/
+.debug-panel {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.9);
+  border: 2px solid var(--dorado);
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  font-size: 12px;
+  max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 9999;
+  text-align: left;
+  font-family: monospace;
+  display: none; /* OCULTO POR DEFECTO */
+}
+
+.debug-log {
+  border-bottom: 1px solid #444;
+  padding: 5px 0;
+  margin: 2px 0;
+}
+
+.debug-time {
+  color: var(--dorado);
+  font-weight: bold;
+}
+
+/* Clase para mostrar el panel solo en modo debug */
+.debug-mode .debug-panel {
+  display: block;
+}
+
+/* ===============================
    RESPONSIVE
 =================================*/
 
@@ -462,11 +501,15 @@ body::before{
 </style>
 </head>
 <body>
-
-<!-- Panel de depuración (visible solo si hay problemas) -->
-<div id="debugPanel" class="debug-panel" style="display: none;">
+<!-- =========================
+     PANEL DE DEPURACIÓN (OCULTO - Solo visible si se activa con #debug en la URL)
+========================= -->
+<div id="debugPanel" class="debug-panel">
   <div style="color: var(--dorado); font-weight: bold; margin-bottom: 10px;">🔍 LOG DE EVENTOS</div>
   <div id="debugLogs"></div>
+  <div style="margin-top: 10px; font-size: 10px; color: #888;">
+    Para ocultar, quita #debug de la URL
+  </div>
 </div>
 
 <!-- =========================
@@ -595,9 +638,9 @@ body::before{
    CONFIGURACIÓN
 ========================= */
 const CONFIG = {
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzn_XfDkZCWSUFjJHoGvjTnIBdTrsZRmEbSHPcCVVy46gSh4zBFxCbwQPeG1hckQGgY/exec',
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec',
   WHATSAPP_NUMBER: '5217716995004',
-  DEBUG: true // Activar modo depuración
+  DEBUG: false // ¡Importante! DEBUG en false para usuarios normales
 };
 
 /* =========================
@@ -625,27 +668,44 @@ let invitationOpened = false;
 let debugLogsArray = [];
 
 /* =========================
+   DETECTAR MODO DEBUG
+   (Activar solo si #debug está en la URL)
+========================= */
+const urlHash = window.location.hash;
+const isDebugMode = urlHash === '#debug' || urlHash === '#debugmode';
+
+if (isDebugMode) {
+  CONFIG.DEBUG = true;
+  document.body.classList.add('debug-mode');
+  console.log('🔧 MODO DEBUG ACTIVADO - Panel visible');
+} else {
+  console.log('🔒 Modo normal - Panel oculto');
+}
+
+/* =========================
    UTILERÍA DE LOGS
+   (Solo guarda en consola, no muestra panel a usuarios normales)
 ========================= */
 function addLog(message, type = 'info') {
   const timestamp = new Date().toLocaleTimeString();
   const logEntry = `[${timestamp}] ${message}`;
   
+  // Siempre a consola del navegador (solo visible para desarrolladores)
   console.log(`🔍 ${logEntry}`);
-  debugLogsArray.unshift(logEntry);
   
-  if (debugLogsArray.length > 10) {
-    debugLogsArray.pop();
-  }
-  
-  if (debugLogs) {
-    debugLogs.innerHTML = debugLogsArray.map(log => 
-      `<div class="debug-log"><span class="debug-time">${log.split(']')[0]}]</span>${log.split(']')[1]}</div>`
-    ).join('');
-  }
-  
-  if (CONFIG.DEBUG) {
-    debugPanel.style.display = 'block';
+  // Si estamos en modo debug, mostrar en el panel
+  if (CONFIG.DEBUG && debugLogs) {
+    debugLogsArray.unshift(logEntry);
+    
+    if (debugLogsArray.length > 10) {
+      debugLogsArray.pop();
+    }
+    
+    debugLogs.innerHTML = debugLogsArray.map(log => {
+      const timePart = log.split(']')[0] + ']';
+      const msgPart = log.split(']')[1] || '';
+      return `<div class="debug-log"><span class="debug-time">${timePart}</span>${msgPart}</div>`;
+    }).join('');
   }
 }
 
@@ -667,9 +727,17 @@ function showNotification(message, duration = 3000) {
 ========================= */
 const params = new URLSearchParams(window.location.search);
 const nombres = params.get("nombres");
-const familia = params.get("familia") || 'Familia no especificada';
+const familia = params.get("familia");
 
-addLog(`URL params - Familia: ${familia}, Nombres: ${nombres}`);
+// IMPORTANTE: Si no hay familia en la URL, usar un valor por defecto pero registrar que falta
+if (!familia) {
+  console.warn('⚠️ ADVERTENCIA: No se especificó familia en la URL');
+  addLog('⚠️ No hay familia en URL');
+}
+
+const familiaValue = familia || 'Familia no especificada';
+
+addLog(`URL params - Familia: ${familiaValue}, Nombres: ${nombres || 'no especificados'}`);
 
 if (nombres) {
   mainNames.innerHTML = `
@@ -680,6 +748,8 @@ if (nombres) {
 
 if (familia) {
   familyName.textContent = familia;
+} else {
+  familyName.textContent = 'Familia Invitada';
 }
 
 /* =========================
@@ -690,30 +760,22 @@ async function registerView() {
   
   try {
     const viewId = Date.now().toString();
-    const url = `${CONFIG.SCRIPT_URL}?action=register_view&familia=${encodeURIComponent(familia)}&nombres=${encodeURIComponent(nombres || '')}&viewId=${viewId}`;
+    // Asegurarnos de enviar la familia aunque sea vacía
+    const familiaToSend = familia || 'Familia no especificada';
+    
+    const url = `${CONFIG.SCRIPT_URL}?action=register_view&familia=${encodeURIComponent(familiaToSend)}&nombres=${encodeURIComponent(nombres || '')}&viewId=${viewId}`;
     
     addLog(`Enviando petición a: ${url.substring(0, 100)}...`);
     
-    const response = await fetch(url, {
+    await fetch(url, {
       method: 'GET',
       mode: 'no-cors'
     });
     
-    addLog('✅ Petición de vista enviada (no-cors, no podemos ver respuesta)');
-    
-    // Intentar con una segunda petición para asegurar
-    setTimeout(async () => {
-      try {
-        await fetch(url, { method: 'GET', mode: 'no-cors' });
-        addLog('✅ Segunda petición de vista enviada');
-      } catch (e) {
-        addLog(`❌ Error en segunda petición: ${e.message}`, 'error');
-      }
-    }, 500);
+    addLog('✅ Petición de vista enviada');
     
   } catch (error) {
     addLog(`❌ Error registrando vista: ${error.message}`, 'error');
-    console.error('Error detallado:', error);
   }
 }
 
@@ -724,12 +786,14 @@ async function registerConfirmation(telefono) {
   addLog(`Intentando registrar confirmación para teléfono: ${telefono}`);
   
   try {
-    const fecha = new Date().toLocaleString('es-MX');
-    const url = `${CONFIG.SCRIPT_URL}?action=confirm_assistance&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefono)}&fecha=${encodeURIComponent(fecha)}`;
+    // Asegurarnos de enviar la familia
+    const familiaToSend = familia || 'Familia no especificada';
+    
+    const url = `${CONFIG.SCRIPT_URL}?action=confirm_assistance&familia=${encodeURIComponent(familiaToSend)}&telefono=${encodeURIComponent(telefono)}`;
     
     addLog(`Enviando confirmación a: ${url.substring(0, 100)}...`);
     
-    const response = await fetch(url, {
+    await fetch(url, {
       method: 'GET',
       mode: 'no-cors'
     });
@@ -737,46 +801,9 @@ async function registerConfirmation(telefono) {
     addLog('✅ Petición de confirmación enviada');
     showNotification('✅ Confirmación registrada. ¡Gracias!');
     
-    // Segunda petición para asegurar
-    setTimeout(async () => {
-      try {
-        await fetch(url, { method: 'GET', mode: 'no-cors' });
-        addLog('✅ Segunda confirmación enviada');
-      } catch (e) {
-        addLog(`❌ Error en segunda confirmación: ${e.message}`, 'error');
-      }
-    }, 500);
-    
   } catch (error) {
     addLog(`❌ Error registrando confirmación: ${error.message}`, 'error');
     showNotification('❌ Error al registrar, pero el mensaje fue enviado');
-  }
-}
-
-/* =========================
-   TEST DE CONEXIÓN AL SPREADSHEET
-========================= */
-async function testSpreadsheetConnection() {
-  addLog('🧪 Probando conexión con el spreadsheet...');
-  
-  try {
-    const testUrl = `${CONFIG.SCRIPT_URL}?action=test&timestamp=${Date.now()}`;
-    
-    // Intentar con fetch normal primero
-    try {
-      const response = await fetch(testUrl, { method: 'GET' });
-      const text = await response.text();
-      addLog(`✅ Conexión exitosa (respuesta: ${text.substring(0, 50)})`);
-    } catch (e) {
-      addLog(`⚠️ Fetch normal falló: ${e.message} (esperado por CORS)`);
-      
-      // Intentar con no-cors
-      await fetch(testUrl, { method: 'GET', mode: 'no-cors' });
-      addLog('✅ Petición no-cors enviada');
-    }
-    
-  } catch (error) {
-    addLog(`❌ Error en prueba: ${error.message}`, 'error');
   }
 }
 
@@ -796,9 +823,6 @@ envelope.addEventListener("click", async () => {
 
   seal.classList.add("break");
   createGoldenConfetti();
-  
-  // Probar conexión primero
-  await testSpreadsheetConnection();
   
   // Registrar vista
   await registerView();
@@ -890,9 +914,12 @@ confirmButton.addEventListener("click", async () => {
   const telefonoInvitado = params.get("telefono") || `invitado_${Date.now()}`;
   addLog(`Teléfono invitado: ${telefonoInvitado}`);
   
+  // Incluir la familia en el mensaje de WhatsApp
+  const familiaMsg = familia ? familia : 'Familia Invitada';
+  
   const mensaje = encodeURIComponent(
     `Hola Javi & Irli 💍✨\n\n` +
-    `Familia: ${familia}\n` +
+    `Familia: ${familiaMsg}\n` +
     `Confirmo mi asistencia a su boda el 28 de marzo de 2026.\n\n` +
     `¡Muchas felicidades! 🎉`
   );
@@ -961,6 +988,12 @@ function startObserver() {
 // Log inicial
 addLog('🚀 Página cargada');
 addLog(`URL completa: ${window.location.href}`);
+
+// Si no hay familia en URL, mostrar advertencia en consola pero no al usuario
+if (!familia) {
+  console.warn('⚠️ IMPORTANTE: Esta invitación no tiene familia especificada en la URL. Los registros aparecerán como "Familia no especificada"');
+  console.warn('Ejemplo de URL correcta: https://tusitio.com/?familia=Familia%20López&nombres=Javi%20%26%20Irli');
+}
 </script>
 </body>
 </html>
