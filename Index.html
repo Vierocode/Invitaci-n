@@ -463,6 +463,12 @@ body::before{
 </head>
 <body>
 
+<!-- Panel de depuración (visible solo si hay problemas) -->
+<div id="debugPanel" class="debug-panel" style="display: none;">
+  <div style="color: var(--dorado); font-weight: bold; margin-bottom: 10px;">🔍 LOG DE EVENTOS</div>
+  <div id="debugLogs"></div>
+</div>
+
 <!-- =========================
      AUDIO
 ========================= -->
@@ -470,54 +476,37 @@ body::before{
   <source src="Intro.m4a" type="audio/mp4">
 </audio>
 
-
 <!-- =========================
      INTRO PERSONALIZABLE
 ========================= -->
 <div class="intro-text">
-
   <div id="mainNames">
     Con amor Javi & Irli <br>
     los invitamos a nuestra boda
   </div>
-
   <div class="familia" id="familyName">
     Familia Salas Ponce
   </div>
-
 </div>
-
 
 <!-- =========================
      SOBRE
 ========================= -->
 <div class="envelope-wrapper">
-
   <div class="envelope" id="envelope">
-
-    <!-- SELLO -->
     <div class="seal" id="seal"></div>
-
   </div>
-
 </div>
 
-
 <!-- =========================
-     CONTENEDOR CONFETTI DORADO
+     CONTENEDOR CONFETTI
 ========================= -->
 <div id="petal-container"></div>
-
-
 
 <!-- =========================
      CONTENIDO PRINCIPAL
 ========================= -->
 <div class="main-content" id="mainContent">
-
-  <!-- =========================
-       VIDEO
-  ========================= -->
   <div class="video-container">
     <video id="weddingVideo" playsinline loop muted autoplay>
       <source src="video.mp4" type="video/mp4">
@@ -525,27 +514,16 @@ body::before{
     </video>
   </div>
 
-  <!-- INDICADOR -->
   <div class="scroll-hint" id="scrollHint">
     ⬇ Desliza para ver más ⬇
   </div>
 
-
-
-  <!-- =========================
-       CUENTA REGRESIVA
-  ========================= -->
   <div class="section-card" id="countdownSection">
     <h2>28 de Marzo del 2026</h2>
     <h2>Faltan</h2>
     <div class="countdown" id="countdown"></div>
   </div>
 
-
-
-  <!-- =========================
-       MENSAJE DE LOS NOVIOS
-  ========================= -->
   <div class="section-card" id="messageSection">
     <h2>Nuestro Mensaje</h2>
     <h2>Irli</h2>
@@ -563,10 +541,7 @@ body::before{
       Ven a celebrar el inicio de nuestra bella historia.
     </p>
   </div>
-  
-  <!-- =========================
-       UBICACIÓN
-  ========================= -->
+ 
   <div class="section-card" id="locationSection">
     <h2>Registro Civil</h2>
     <p>
@@ -580,9 +555,6 @@ body::before{
     </button>
   </div>
   
-  <!-- =========================
-       DRESS CODE
-  ========================= -->
   <div class="section-card dress-wrapper" id="dressSection">
     <div class="dress-switch" id="dressSwitch"></div>
     <h2>Dress Code</h2>
@@ -595,9 +567,6 @@ body::before{
     </div>
   </div>
   
-  <!-- =========================
-       CONFIRMAR ASISTENCIA
-  ========================= -->
   <div class="section-card" id="confirmSection">
     <h2>Confirma tu asistencia</h2>
     <p>
@@ -609,9 +578,6 @@ body::before{
     </button>
   </div>
   
-  <!-- =========================
-       TARJETA FINAL
-  ========================= -->
   <div class="closing-card" id="closingSection">
     Gracias por formar parte de nuestra historia. <br><br>
     Con todo nuestro amor,<br>
@@ -625,16 +591,13 @@ body::before{
 <div id="notification" style="display: none;"></div>
 
 <script>
-
 /* =========================
    CONFIGURACIÓN
 ========================= */
 const CONFIG = {
-  // URL de tu Google Apps Script (el mismo que ya tienes)
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec',
-  
-  // Teléfono para confirmaciones
-  WHATSAPP_NUMBER: '5217716995004'
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzn_XfDkZCWSUFjJHoGvjTnIBdTrsZRmEbSHPcCVVy46gSh4zBFxCbwQPeG1hckQGgY/exec',
+  WHATSAPP_NUMBER: '5217716995004',
+  DEBUG: true // Activar modo depuración
 };
 
 /* =========================
@@ -655,8 +618,36 @@ const dressContent = document.getElementById("dressContent");
 const familyName = document.getElementById("familyName");
 const mainNames = document.getElementById("mainNames");
 const notification = document.getElementById("notification");
+const debugPanel = document.getElementById("debugPanel");
+const debugLogs = document.getElementById("debugLogs");
 
 let invitationOpened = false;
+let debugLogsArray = [];
+
+/* =========================
+   UTILERÍA DE LOGS
+========================= */
+function addLog(message, type = 'info') {
+  const timestamp = new Date().toLocaleTimeString();
+  const logEntry = `[${timestamp}] ${message}`;
+  
+  console.log(`🔍 ${logEntry}`);
+  debugLogsArray.unshift(logEntry);
+  
+  if (debugLogsArray.length > 10) {
+    debugLogsArray.pop();
+  }
+  
+  if (debugLogs) {
+    debugLogs.innerHTML = debugLogsArray.map(log => 
+      `<div class="debug-log"><span class="debug-time">${log.split(']')[0]}]</span>${log.split(']')[1]}</div>`
+    ).join('');
+  }
+  
+  if (CONFIG.DEBUG) {
+    debugPanel.style.display = 'block';
+  }
+}
 
 /* =========================
    UTILERÍA DE NOTIFICACIONES
@@ -678,6 +669,8 @@ const params = new URLSearchParams(window.location.search);
 const nombres = params.get("nombres");
 const familia = params.get("familia") || 'Familia no especificada';
 
+addLog(`URL params - Familia: ${familia}, Nombres: ${nombres}`);
+
 if (nombres) {
   mainNames.innerHTML = `
     Con amor ${nombres} <br>
@@ -693,85 +686,137 @@ if (familia) {
    REGISTRAR VISTA EN SPREADSHEET
 ========================= */
 async function registerView() {
+  addLog('Intentando registrar vista...');
+  
   try {
-    // Generar un ID único para esta vista
     const viewId = Date.now().toString();
+    const url = `${CONFIG.SCRIPT_URL}?action=register_view&familia=${encodeURIComponent(familia)}&nombres=${encodeURIComponent(nombres || '')}&viewId=${viewId}`;
     
-    const response = await fetch(`${CONFIG.SCRIPT_URL}?action=register_view&familia=${encodeURIComponent(familia)}&nombres=${encodeURIComponent(nombres || '')}&viewId=${viewId}`, {
+    addLog(`Enviando petición a: ${url.substring(0, 100)}...`);
+    
+    const response = await fetch(url, {
       method: 'GET',
       mode: 'no-cors'
     });
     
-    console.log('Vista registrada correctamente');
+    addLog('✅ Petición de vista enviada (no-cors, no podemos ver respuesta)');
+    
+    // Intentar con una segunda petición para asegurar
+    setTimeout(async () => {
+      try {
+        await fetch(url, { method: 'GET', mode: 'no-cors' });
+        addLog('✅ Segunda petición de vista enviada');
+      } catch (e) {
+        addLog(`❌ Error en segunda petición: ${e.message}`, 'error');
+      }
+    }, 500);
+    
   } catch (error) {
-    console.error('Error registrando vista:', error);
+    addLog(`❌ Error registrando vista: ${error.message}`, 'error');
+    console.error('Error detallado:', error);
   }
 }
 
 /* =========================
-   REGISTRAR CONFIRMACIÓN EN SPREADSHEET
-   (Columna A: Teléfono, Columna B: ✓ Confirmado, Columna C: Familia)
+   REGISTRAR CONFIRMACIÓN
 ========================= */
 async function registerConfirmation(telefono) {
+  addLog(`Intentando registrar confirmación para teléfono: ${telefono}`);
+  
   try {
-    const fecha = new Date().toLocaleString('es-MX', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const fecha = new Date().toLocaleString('es-MX');
+    const url = `${CONFIG.SCRIPT_URL}?action=confirm_assistance&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefono)}&fecha=${encodeURIComponent(fecha)}`;
     
-    // Aquí enviamos la confirmación al spreadsheet
-    const response = await fetch(`${CONFIG.SCRIPT_URL}?action=confirm_assistance&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefono)}&fecha=${encodeURIComponent(fecha)}`, {
+    addLog(`Enviando confirmación a: ${url.substring(0, 100)}...`);
+    
+    const response = await fetch(url, {
       method: 'GET',
       mode: 'no-cors'
     });
     
-    console.log('Confirmación registrada en spreadsheet');
-    showNotification('✅ Confirmación registrada. ¡Gracias por confirmar!');
+    addLog('✅ Petición de confirmación enviada');
+    showNotification('✅ Confirmación registrada. ¡Gracias!');
     
-    // También podemos registrar un evento adicional si queremos
-    await fetch(`${CONFIG.SCRIPT_URL}?action=log_confirmation&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefono)}&fecha=${encodeURIComponent(fecha)}`, {
-      method: 'GET',
-      mode: 'no-cors'
-    });
+    // Segunda petición para asegurar
+    setTimeout(async () => {
+      try {
+        await fetch(url, { method: 'GET', mode: 'no-cors' });
+        addLog('✅ Segunda confirmación enviada');
+      } catch (e) {
+        addLog(`❌ Error en segunda confirmación: ${e.message}`, 'error');
+      }
+    }, 500);
     
   } catch (error) {
-    console.error('Error registrando confirmación:', error);
+    addLog(`❌ Error registrando confirmación: ${error.message}`, 'error');
     showNotification('❌ Error al registrar, pero el mensaje fue enviado');
+  }
+}
+
+/* =========================
+   TEST DE CONEXIÓN AL SPREADSHEET
+========================= */
+async function testSpreadsheetConnection() {
+  addLog('🧪 Probando conexión con el spreadsheet...');
+  
+  try {
+    const testUrl = `${CONFIG.SCRIPT_URL}?action=test&timestamp=${Date.now()}`;
+    
+    // Intentar con fetch normal primero
+    try {
+      const response = await fetch(testUrl, { method: 'GET' });
+      const text = await response.text();
+      addLog(`✅ Conexión exitosa (respuesta: ${text.substring(0, 50)})`);
+    } catch (e) {
+      addLog(`⚠️ Fetch normal falló: ${e.message} (esperado por CORS)`);
+      
+      // Intentar con no-cors
+      await fetch(testUrl, { method: 'GET', mode: 'no-cors' });
+      addLog('✅ Petición no-cors enviada');
+    }
+    
+  } catch (error) {
+    addLog(`❌ Error en prueba: ${error.message}`, 'error');
   }
 }
 
 /* =========================
    ABRIR SOBRE
 ========================= */
-envelope.addEventListener("click", () => {
+envelope.addEventListener("click", async () => {
+  addLog('📬 Sobre clickeado');
 
-  if (invitationOpened) return;
+  if (invitationOpened) {
+    addLog('Sobre ya estaba abierto, ignorando');
+    return;
+  }
+  
   invitationOpened = true;
+  addLog('Abriendo sobre...');
 
   seal.classList.add("break");
   createGoldenConfetti();
   
-  // Registrar vista al abrir el sobre
-  registerView();
+  // Probar conexión primero
+  await testSpreadsheetConnection();
+  
+  // Registrar vista
+  await registerView();
 
   document.querySelector(".intro-text").classList.add("intro-hide");
   document.querySelector(".envelope-wrapper").classList.add("intro-hide");
 
   setTimeout(() => {
-
+    addLog('Mostrando contenido principal');
     mainContent.classList.add("show");
 
     bgMusic.volume = 0.6;
-    bgMusic.play().catch(e => console.log("Audio no pudo reproducirse:", e));
+    bgMusic.play().catch(e => addLog(`Audio error: ${e.message}`));
 
     video.muted = false;
-    video.play().catch(e => console.log("Video no pudo reproducirse:", e));
+    video.play().catch(e => addLog(`Video error: ${e.message}`));
 
     scrollHint.classList.add("show");
-
     startObserver();
 
     window.scrollTo({
@@ -780,7 +825,6 @@ envelope.addEventListener("click", () => {
     });
 
   }, 1000);
-
 });
 
 /* =========================
@@ -834,18 +878,18 @@ updateCountdown();
 mapButton.addEventListener("click", () => {
   const mapsURL = "https://www.google.com/maps/search/?api=1&query=Plaza+City+Shops+Valle+Dorado+Tlalnepantla";
   window.open(mapsURL, "_blank");
+  addLog('Mapa abierto');
 });
 
 /* =========================
-   CONFIRMAR WHATSAPP - VERSIÓN FINAL
-   Registra en spreadsheet: A)Teléfono, B)✓ Confirmado, C)Familia
+   CONFIRMAR WHATSAPP
 ========================= */
 confirmButton.addEventListener("click", async () => {
+  addLog('📱 Botón de confirmación clickeado');
   
-  // Obtener el número de teléfono del invitado (si está en URL) o generar uno temporal
   const telefonoInvitado = params.get("telefono") || `invitado_${Date.now()}`;
+  addLog(`Teléfono invitado: ${telefonoInvitado}`);
   
-  // Mensaje personalizado con la familia
   const mensaje = encodeURIComponent(
     `Hola Javi & Irli 💍✨\n\n` +
     `Familia: ${familia}\n` +
@@ -853,27 +897,13 @@ confirmButton.addEventListener("click", async () => {
     `¡Muchas felicidades! 🎉`
   );
 
-  // URL de WhatsApp
   const url = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${mensaje}`;
   
-  // Abrir WhatsApp
+  addLog('Abriendo WhatsApp...');
   window.open(url, "_blank");
   
-  // Registrar confirmación en el spreadsheet
   await registerConfirmation(telefonoInvitado);
-  
-  // Mostrar notificación
   showNotification('📱 Mensaje preparado. Por favor envíalo desde WhatsApp.');
-  
-  // También podemos registrar el evento en una hoja separada
-  try {
-    await fetch(`${CONFIG.SCRIPT_URL}?action=track_confirmation&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefonoInvitado)}&timestamp=${Date.now()}`, {
-      method: 'GET',
-      mode: 'no-cors'
-    });
-  } catch (e) {
-    console.log('Tracking extra:', e);
-  }
 });
 
 /* =========================
@@ -893,6 +923,7 @@ dressSwitch.addEventListener("click", () => {
       • Zapato formal negro o café
     `;
     dressSwitch.classList.remove("active");
+    addLog('Dress code cambiado a hombres');
   } else {
     dressContent.innerHTML = `
       👗 Mujeres:<br><br>
@@ -902,6 +933,7 @@ dressSwitch.addEventListener("click", () => {
       • Accesorios delicados
     `;
     dressSwitch.classList.add("active");
+    addLog('Dress code cambiado a mujeres');
   }
 });
 
@@ -922,8 +954,13 @@ function startObserver() {
   sections.forEach(section => {
     observer.observe(section);
   });
+  
+  addLog('Observer de scroll iniciado');
 }
 
+// Log inicial
+addLog('🚀 Página cargada');
+addLog(`URL completa: ${window.location.href}`);
 </script>
 </body>
 </html>
