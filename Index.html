@@ -14,9 +14,9 @@
   --dorado:#C6A85B;
   --dorado-suave:#E7D49A;
   --rosa:#f4c2d7;
-  --fondo-oscuro:rgba(0,0,0,0.65); /* <<< CORREGIDO Un poco más oscuro para mejor legibilidad */
-  --card-bg:rgba(0,0,0,0.65); /* <<< CORREGIDO */
-  --texto-claro: #fff9e6; /* <<< CORREGIDO Texto más claro */
+  --fondo-oscuro:rgba(0,0,0,0.65);
+  --card-bg:rgba(0,0,0,0.65);
+  --texto-claro: #fff9e6;
 }
 
 /* ===============================
@@ -30,7 +30,7 @@
 body{
   margin:0;
   font-family:'Cormorant Garamond', serif;
-  color:var(--texto-claro); /* <<< CORREGIDO */
+  color:var(--texto-claro);
   text-align:center;
   overflow-x:hidden;
   background: url("fondo.png") no-repeat center center fixed;
@@ -42,7 +42,7 @@ body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.6); /* <<< CORREGIDO Un poco más oscuro */
+  background:rgba(0,0,0,0.6);
   z-index:-1;
 }
 
@@ -56,8 +56,8 @@ body::before{
   font-size:30px;
   line-height:1.4;
   font-weight:500;
-  text-shadow:0 2px 10px rgba(0,0,0,.8); /* <<< CORREGIDO */
-  color: var(--dorado-suave); /* <<< CORREGIDO */
+  text-shadow:0 2px 10px rgba(0,0,0,.8);
+  color: var(--dorado-suave);
 }
 
 .intro-text .familia{
@@ -163,7 +163,7 @@ body::before{
   opacity:.9;
   pointer-events:none;
   animation:fall linear forwards;
-  z-index: 10; /* <<< CORREGIDO Para que esté sobre todo */
+  z-index: 10;
 }
 
 @keyframes fall{
@@ -201,7 +201,7 @@ body::before{
 }
 
 /* ===============================
-   VIDEO (AHORA SIEMPRE ARRIBA)
+   VIDEO
 =================================*/
 
 .video-container{
@@ -218,7 +218,7 @@ body::before{
 .video-container video{
   width:100%;
   border-radius:18px;
-  display: block; /* <<< CORREGIDO Elimina espacio extra abajo del video */
+  display: block;
 }
 
 /* ===============================
@@ -234,7 +234,7 @@ body::before{
   width:100%;
   animation:bounce 2s infinite;
   transition:opacity .6s ease;
-  color: var(--dorado-suave); /* <<< CORREGIDO */
+  color: var(--dorado-suave);
 }
 
 .scroll-hint.show{
@@ -257,7 +257,7 @@ body::before{
   border-radius:25px;
   background:var(--card-bg);
   border:1px solid var(--dorado);
-  backdrop-filter:blur(8px); /* <<< CORREGIDO Un poco más de blur */
+  backdrop-filter:blur(8px);
   box-shadow:0 0 30px rgba(0,0,0,.7);
   opacity:0;
   transform:translateY(40px);
@@ -271,18 +271,18 @@ body::before{
 
 .section-card h2{
   font-family:'Great Vibes', cursive;
-  font-size:42px; /* <<< CORREGIDO Un poco más grande */
+  font-size:42px;
   font-weight:400;
   margin-bottom:25px;
   letter-spacing:1px;
-  color: var(--dorado); /* <<< CORREGIDO */
+  color: var(--dorado);
 }
 
 .section-card p,
 .section-card div{
   font-size:20px;
   line-height:1.8;
-  color: var(--texto-claro); /* <<< CORREGIDO */
+  color: var(--texto-claro);
 }
 
 /* ===============================
@@ -293,15 +293,15 @@ body::before{
   padding:14px 30px;
   border:none;
   border-radius:40px;
-  font-size:18px; /* <<< CORREGIDO */
+  font-size:18px;
   font-weight:600;
   cursor:pointer;
   background:linear-gradient(90deg,var(--dorado),var(--dorado-suave));
-  color:#222; /* <<< CORREGIDO */
+  color:#222;
   position:relative;
   overflow:hidden;
   transition:transform .3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* <<< CORREGIDO */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .btn-shiny:hover{
@@ -321,7 +321,7 @@ body::before{
 
 @keyframes shine{
   0%{left:-100%;}
-  20%{left:100%;} /* <<< CORREGIDO Más rápido */
+  20%{left:100%;}
   100%{left:100%;}
 }
 
@@ -330,7 +330,7 @@ body::before{
 =================================*/
 
 .countdown{
-  font-size:24px; /* <<< CORREGIDO */
+  font-size:24px;
   letter-spacing:1px;
   font-weight: 600;
 }
@@ -346,21 +346,21 @@ body::before{
 
 .dress-switch{
   position:absolute;
-  top:-15px; /* <<< CORREGIDO */
-  right:10px; /* <<< CORREGIDO Lo moví a la derecha */
-  left: auto; /* <<< CORREGIDO */
-  width:55px; /* <<< CORREGIDO */
-  height:26px; /* <<< CORREGIDO */
+  top:-15px;
+  right:10px;
+  left: auto;
+  width:55px;
+  height:26px;
   background:#555;
   border-radius:20px;
   cursor:pointer;
-  border: 1px solid var(--dorado); /* <<< CORREGIDO */
+  border: 1px solid var(--dorado);
 }
 
 .dress-switch::after{
   content:"";
-  width:22px; /* <<< CORREGIDO */
-  height:22px; /* <<< CORREGIDO */
+  width:22px;
+  height:22px;
   border-radius:50%;
   background:var(--dorado);
   position:absolute;
@@ -370,7 +370,7 @@ body::before{
 }
 
 .dress-switch.active::after{
-  left:30px; /* <<< CORREGIDO */
+  left:30px;
 }
 
 /* ===============================
@@ -384,11 +384,11 @@ body::before{
   border-radius:30px;
   border:1px solid var(--dorado);
   background:var(--card-bg);
-  backdrop-filter:blur(8px); /* <<< CORREGIDO Consistencia */
+  backdrop-filter:blur(8px);
   box-shadow:0 0 40px rgba(0,0,0,.7);
-  font-size:22px; /* <<< CORREGIDO */
+  font-size:22px;
   line-height: 1.6;
-  color: var(--dorado-suave); /* <<< CORREGIDO */
+  color: var(--dorado-suave);
   opacity:0;
   transform:translateY(40px);
   transition:all .8s ease;
@@ -400,30 +400,64 @@ body::before{
 }
 
 /* ===============================
+   NOTIFICACIONES
+=================================*/
+.notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card-bg);
+  border: 2px solid var(--dorado);
+  border-radius: 50px;
+  padding: 12px 24px;
+  color: var(--dorado-suave);
+  font-size: 16px;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ===============================
    RESPONSIVE
 =================================*/
 
 @media(max-width:600px){
-
-.intro-text{
-  padding:40px 20px 20px; /* <<< CORREGIDO */
-  font-size:28px; /* <<< CORREGIDO */
-  line-height:1.5;
-}
-
-.intro-text .familia{
-  margin-top:15px;
-  font-size:22px;
-}
-
-.section-card{
-  padding:25px 20px;
-}
-
-.video-container{
-  margin-top:20px;
-}
-
+  .intro-text{
+    padding:40px 20px 20px;
+    font-size:28px;
+  }
+  
+  .intro-text .familia{
+    margin-top:15px;
+    font-size:22px;
+  }
+  
+  .section-card{
+    padding:25px 20px;
+  }
+  
+  .video-container{
+    margin-top:20px;
+  }
+  
+  .notification {
+    width: 90%;
+    text-align: center;
+    font-size: 14px;
+  }
 }
 </style>
 </head>
@@ -482,9 +516,7 @@ body::before{
 <div class="main-content" id="mainContent">
 
   <!-- =========================
-       VIDEO (SIEMPRE ARRIBA)
-       <<< CORREGIDO: Cambié 'video.mp4' por 'Video.mp4' para que coincida con tu audio. 
-       Asegúrate que el archivo en tu carpeta se llame EXACTAMENTE 'Video.mp4' (con V mayúscula).
+       VIDEO
   ========================= -->
   <div class="video-container">
     <video id="weddingVideo" playsinline loop muted autoplay>
@@ -505,7 +537,7 @@ body::before{
   ========================= -->
   <div class="section-card" id="countdownSection">
     <h2>28 de Marzo del 2026</h2>
-     <h2>Faltan</h2>
+    <h2>Faltan</h2>
     <div class="countdown" id="countdown"></div>
   </div>
 
@@ -516,13 +548,13 @@ body::before{
   ========================= -->
   <div class="section-card" id="messageSection">
     <h2>Nuestro Mensaje</h2>
-     <h2>Irli</h2>
+    <h2>Irli</h2>
     <p>
       Queremos que seas testigo de este nuevo comienzo,
       donde el amor es elección diaria
       y la felicidad, un compromiso compartido.
     </p>
-         <h2>Javi</h2>
+    <h2>Javi</h2>
     <p>
       No fue casualidad, fue destino.
       No fue prisa, fue certeza.
@@ -531,7 +563,8 @@ body::before{
       Ven a celebrar el inicio de nuestra bella historia.
     </p>
   </div>
- <!-- =========================
+  
+  <!-- =========================
        UBICACIÓN
   ========================= -->
   <div class="section-card" id="locationSection">
@@ -546,6 +579,7 @@ body::before{
       Ver en Google Maps
     </button>
   </div>
+  
   <!-- =========================
        DRESS CODE
   ========================= -->
@@ -560,6 +594,7 @@ body::before{
       • Zapato formal negro o café
     </div>
   </div>
+  
   <!-- =========================
        CONFIRMAR ASISTENCIA
   ========================= -->
@@ -573,6 +608,7 @@ body::before{
       Confirmar por WhatsApp
     </button>
   </div>
+  
   <!-- =========================
        TARJETA FINAL
   ========================= -->
@@ -582,12 +618,28 @@ body::before{
     Javi & Irli 💍✨
   </div>
 </div>
+
+<!-- =========================
+     NOTIFICACIONES
+========================= -->
+<div id="notification" style="display: none;"></div>
+
 <script>
+
+/* =========================
+   CONFIGURACIÓN
+========================= */
+const CONFIG = {
+  // URL de tu Google Apps Script (el mismo que ya tienes)
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz-Zu3yU-JzA1REYIBz35vbBVCQMUVLNZQpS7ZUhjaEKH6Po6V8hooMz7RPa_UbPh-2/exec',
+  
+  // Teléfono para confirmaciones
+  WHATSAPP_NUMBER: '5217716995004'
+};
 
 /* =========================
    VARIABLES GLOBALES
 ========================= */
-
 const envelope = document.getElementById("envelope");
 const seal = document.getElementById("seal");
 const mainContent = document.getElementById("mainContent");
@@ -602,19 +654,29 @@ const dressSwitch = document.getElementById("dressSwitch");
 const dressContent = document.getElementById("dressContent");
 const familyName = document.getElementById("familyName");
 const mainNames = document.getElementById("mainNames");
+const notification = document.getElementById("notification");
 
 let invitationOpened = false;
 
+/* =========================
+   UTILERÍA DE NOTIFICACIONES
+========================= */
+function showNotification(message, duration = 3000) {
+  notification.style.display = 'block';
+  notification.textContent = message;
+  notification.className = 'notification';
+  
+  setTimeout(() => {
+    notification.style.display = 'none';
+  }, duration);
+}
 
 /* =========================
    PERSONALIZACIÓN POR URL
-   ?familia=Familia%20López&nombres=Javi%20%26%20Irli
 ========================= */
-
 const params = new URLSearchParams(window.location.search);
-
 const nombres = params.get("nombres");
-const familia = params.get("familia");
+const familia = params.get("familia") || 'Familia no especificada';
 
 if (nombres) {
   mainNames.innerHTML = `
@@ -627,11 +689,63 @@ if (familia) {
   familyName.textContent = familia;
 }
 
+/* =========================
+   REGISTRAR VISTA EN SPREADSHEET
+========================= */
+async function registerView() {
+  try {
+    // Generar un ID único para esta vista
+    const viewId = Date.now().toString();
+    
+    const response = await fetch(`${CONFIG.SCRIPT_URL}?action=register_view&familia=${encodeURIComponent(familia)}&nombres=${encodeURIComponent(nombres || '')}&viewId=${viewId}`, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
+    
+    console.log('Vista registrada correctamente');
+  } catch (error) {
+    console.error('Error registrando vista:', error);
+  }
+}
+
+/* =========================
+   REGISTRAR CONFIRMACIÓN EN SPREADSHEET
+   (Columna A: Teléfono, Columna B: ✓ Confirmado, Columna C: Familia)
+========================= */
+async function registerConfirmation(telefono) {
+  try {
+    const fecha = new Date().toLocaleString('es-MX', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    // Aquí enviamos la confirmación al spreadsheet
+    const response = await fetch(`${CONFIG.SCRIPT_URL}?action=confirm_assistance&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefono)}&fecha=${encodeURIComponent(fecha)}`, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
+    
+    console.log('Confirmación registrada en spreadsheet');
+    showNotification('✅ Confirmación registrada. ¡Gracias por confirmar!');
+    
+    // También podemos registrar un evento adicional si queremos
+    await fetch(`${CONFIG.SCRIPT_URL}?action=log_confirmation&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefono)}&fecha=${encodeURIComponent(fecha)}`, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
+    
+  } catch (error) {
+    console.error('Error registrando confirmación:', error);
+    showNotification('❌ Error al registrar, pero el mensaje fue enviado');
+  }
+}
 
 /* =========================
    ABRIR SOBRE
 ========================= */
-
 envelope.addEventListener("click", () => {
 
   if (invitationOpened) return;
@@ -639,6 +753,9 @@ envelope.addEventListener("click", () => {
 
   seal.classList.add("break");
   createGoldenConfetti();
+  
+  // Registrar vista al abrir el sobre
+  registerView();
 
   document.querySelector(".intro-text").classList.add("intro-hide");
   document.querySelector(".envelope-wrapper").classList.add("intro-hide");
@@ -650,17 +767,13 @@ envelope.addEventListener("click", () => {
     bgMusic.volume = 0.6;
     bgMusic.play().catch(e => console.log("Audio no pudo reproducirse:", e));
 
-    // Quitar el mute y asegurar reproducción del video
     video.muted = false;
     video.play().catch(e => console.log("Video no pudo reproducirse:", e));
 
-    // Mostrar el indicador de scroll
     scrollHint.classList.add("show");
 
-    // Iniciar el observer para las secciones AHORA que el contenido es visible
     startObserver();
 
-    // Hacer scroll suave hacia el contenido
     window.scrollTo({
       top: mainContent.offsetTop - 20,
       behavior: "smooth"
@@ -670,11 +783,9 @@ envelope.addEventListener("click", () => {
 
 });
 
-
 /* =========================
    CONFETTI DORADO
 ========================= */
-
 function createGoldenConfetti() {
   for (let i = 0; i < 60; i++) {
     const coin = document.createElement("div");
@@ -689,16 +800,12 @@ function createGoldenConfetti() {
   }
 }
 
-
 /* =========================
    CUENTA REGRESIVA
-   28 MARZO 2026 - 16:00 hrs
 ========================= */
-
 const weddingDate = new Date("2026-03-28T16:00:00").getTime();
 
 function updateCountdown() {
-
   const now = new Date().getTime();
   const distance = weddingDate - now;
 
@@ -721,49 +828,63 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-
 /* =========================
    GOOGLE MAPS
 ========================= */
-
 mapButton.addEventListener("click", () => {
   const mapsURL = "https://www.google.com/maps/search/?api=1&query=Plaza+City+Shops+Valle+Dorado+Tlalnepantla";
   window.open(mapsURL, "_blank");
 });
 
-
 /* =========================
-   CONFIRMAR WHATSAPP
-   <<< CORREGIDO: Añadí el marcador para el número
+   CONFIRMAR WHATSAPP - VERSIÓN FINAL
+   Registra en spreadsheet: A)Teléfono, B)✓ Confirmado, C)Familia
 ========================= */
-
-confirmButton.addEventListener("click", () => {
-
-  const telefono = "5217716995004"; 
-
+confirmButton.addEventListener("click", async () => {
+  
+  // Obtener el número de teléfono del invitado (si está en URL) o generar uno temporal
+  const telefonoInvitado = params.get("telefono") || `invitado_${Date.now()}`;
+  
+  // Mensaje personalizado con la familia
   const mensaje = encodeURIComponent(
-    "Hola Javi & Irli 💍✨ Confirmo mi asistencia a su boda el 28 de marzo de 2026."
+    `Hola Javi & Irli 💍✨\n\n` +
+    `Familia: ${familia}\n` +
+    `Confirmo mi asistencia a su boda el 28 de marzo de 2026.\n\n` +
+    `¡Muchas felicidades! 🎉`
   );
 
-  const url = `https://wa.me/${telefono}?text=${mensaje}`;
-
+  // URL de WhatsApp
+  const url = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${mensaje}`;
+  
+  // Abrir WhatsApp
   window.open(url, "_blank");
-
+  
+  // Registrar confirmación en el spreadsheet
+  await registerConfirmation(telefonoInvitado);
+  
+  // Mostrar notificación
+  showNotification('📱 Mensaje preparado. Por favor envíalo desde WhatsApp.');
+  
+  // También podemos registrar el evento en una hoja separada
+  try {
+    await fetch(`${CONFIG.SCRIPT_URL}?action=track_confirmation&familia=${encodeURIComponent(familia)}&telefono=${encodeURIComponent(telefonoInvitado)}&timestamp=${Date.now()}`, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
+  } catch (e) {
+    console.log('Tracking extra:', e);
+  }
 });
-
 
 /* =========================
    DRESS CODE SWITCH
 ========================= */
-
 let showingMen = true;
 
 dressSwitch.addEventListener("click", () => {
-
   showingMen = !showingMen;
 
   if (showingMen) {
-
     dressContent.innerHTML = `
       👔 Hombres:<br><br>
       • Traje formal oscuro<br>
@@ -771,11 +892,8 @@ dressSwitch.addEventListener("click", () => {
       • Corbata o moño elegante<br>
       • Zapato formal negro o café
     `;
-
     dressSwitch.classList.remove("active");
-
   } else {
-
     dressContent.innerHTML = `
       👗 Mujeres:<br><br>
       • Vestido formal largo o midi<br>
@@ -783,18 +901,13 @@ dressSwitch.addEventListener("click", () => {
       • Tacón o zapatilla formal<br>
       • Accesorios delicados
     `;
-
     dressSwitch.classList.add("active");
   }
-
 });
-
 
 /* =========================
    ANIMACIÓN AL HACER SCROLL
-   <<< CORREGIDO: Esta función se llama DESPUÉS de abrir el sobre
 ========================= */
-
 function startObserver() {
   const sections = document.querySelectorAll(".section-card, .closing-card");
 
@@ -804,19 +917,13 @@ function startObserver() {
         entry.target.classList.add("visible");
       }
     });
-  }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" }); // <<< CORREGIDO pequeño ajuste
+  }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" });
 
   sections.forEach(section => {
     observer.observe(section);
   });
 }
 
-// El observer ya no se inicia aquí. Se inicia desde dentro del evento del sobre.
-// startObserver(); <<< Esta línea ha sido eliminada
-
 </script>
 </body>
 </html>
-
-
-
