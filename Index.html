@@ -842,7 +842,12 @@ setInterval(updateCountdown, 1000);
 updateCountdown();
 
 mapButton.addEventListener("click", () => {
+ const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMobile) {
+  window.open("https://maps.google.com/?q=City+Shops+Valle+Dorado+Tlalnepantla", "_blank");
+} else {
   window.open("https://www.google.com/maps/place/?q=place_id:ChIJsUDXn2od0oURpAnsjV2k44A", "_blank");
+}
 });
 
 let showingMen = true;
