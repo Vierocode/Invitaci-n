@@ -23,213 +23,177 @@ body {
   min-height: 100vh;
 }
 body::before {
-  content: "";
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.62);
-  z-index: -1;
+  content: ""; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.62); z-index: -1;
 }
+
+/* HERO */
 .hero { padding: 60px 20px 30px; }
-.hero-subtitle {
-  font-size: 18px; letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--dorado); margin-bottom: 10px; opacity: 0.85;
-}
-.hero-title {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(52px, 12vw, 88px);
-  color: var(--dorado-suave);
-  text-shadow: 0 4px 24px rgba(198,168,91,0.35);
-  line-height: 1.1; margin-bottom: 14px;
-}
-.hero-desc {
-  font-size: 20px; opacity: 0.85; line-height: 1.7;
-  max-width: 500px; margin: 0 auto 30px;
-}
-.divider {
-  width: 120px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--dorado), transparent);
-  margin: 0 auto 50px;
-}
-.upload-card {
+.hero-subtitle { font-size: 18px; letter-spacing: 4px; text-transform: uppercase; color: var(--dorado); margin-bottom: 10px; opacity: .85; }
+.hero-title { font-family: 'Great Vibes', cursive; font-size: clamp(52px,12vw,88px); color: var(--dorado-suave); text-shadow: 0 4px 24px rgba(198,168,91,.35); line-height: 1.1; margin-bottom: 14px; }
+.hero-desc { font-size: 20px; opacity: .85; line-height: 1.7; max-width: 500px; margin: 0 auto 30px; }
+.divider { width: 120px; height: 1px; background: linear-gradient(90deg,transparent,var(--dorado),transparent); margin: 0 auto 50px; }
+
+/* CARD BASE */
+.card {
   max-width: 560px; margin: 0 auto 50px;
   padding: 40px 30px; border-radius: 25px;
   background: var(--card-bg); border: 1px solid var(--dorado);
-  backdrop-filter: blur(10px); box-shadow: 0 0 40px rgba(0,0,0,0.7);
+  backdrop-filter: blur(10px); box-shadow: 0 0 40px rgba(0,0,0,.7);
 }
-.upload-card h2 {
-  font-family: 'Great Vibes', cursive; font-size: 42px;
-  color: var(--dorado); font-weight: 400; margin-bottom: 10px;
-}
-.upload-card > p {
-  font-size: 18px; opacity: 0.8; margin-bottom: 25px; line-height: 1.6;
-}
+.card h2 { font-family: 'Great Vibes', cursive; font-size: 42px; color: var(--dorado); font-weight: 400; margin-bottom: 14px; }
+.card p  { font-size: 18px; opacity: .8; margin-bottom: 22px; line-height: 1.6; }
+
+/* DROP ZONE */
 .drop-zone {
   border: 2px dashed var(--dorado); border-radius: 18px;
   padding: 40px 20px; cursor: pointer;
-  transition: all 0.3s ease;
-  background: rgba(198,168,91,0.05);
+  transition: all .3s; background: rgba(198,168,91,.05);
   margin-bottom: 20px; position: relative;
 }
-.drop-zone:hover, .drop-zone.drag-over {
-  background: rgba(198,168,91,0.12);
-  border-color: var(--dorado-suave); transform: scale(1.01);
-}
+.drop-zone:hover, .drop-zone.drag-over { background: rgba(198,168,91,.12); border-color: var(--dorado-suave); transform: scale(1.01); }
 .drop-zone .icon { font-size: 48px; margin-bottom: 12px; display: block; }
 .drop-zone p { margin: 0; font-size: 17px; }
-.drop-zone input[type="file"] {
-  position: absolute; inset: 0; opacity: 0;
-  cursor: pointer; width: 100%; height: 100%;
-}
+.drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+
+/* PROGRESS */
 .progress-wrap { display: none; margin-top: 15px; }
-.progress-bar-bg {
-  background: rgba(255,255,255,0.1);
-  border-radius: 20px; height: 8px; overflow: hidden;
-}
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--dorado), var(--dorado-suave));
-  border-radius: 20px; width: 0%; transition: width 0.3s ease;
-}
+.progress-bar-bg { background: rgba(255,255,255,.1); border-radius: 20px; height: 8px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg,var(--dorado),var(--dorado-suave)); border-radius: 20px; width: 0%; transition: width .3s; }
 .progress-text { font-size: 15px; margin-top: 8px; color: var(--dorado-suave); }
-.btn-row {
-  display: flex; gap: 14px; justify-content: center;
-  flex-wrap: wrap; margin-top: 10px;
-}
+
+/* BOTONES */
+.btn-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
 .btn-shiny {
   padding: 13px 28px; border: none; border-radius: 40px;
-  font-size: 17px; font-family: 'Cormorant Garamond', serif;
-  font-weight: 600; cursor: pointer;
-  background: linear-gradient(90deg, var(--dorado), var(--dorado-suave));
+  font-size: 17px; font-family: 'Cormorant Garamond', serif; font-weight: 600;
+  cursor: pointer; background: linear-gradient(90deg,var(--dorado),var(--dorado-suave));
   color: #222; position: relative; overflow: hidden;
-  transition: transform 0.3s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  transition: transform .3s; box-shadow: 0 4px 14px rgba(0,0,0,.35);
 }
 .btn-shiny:hover { transform: scale(1.05); }
-.btn-shiny::after {
-  content: ""; position: absolute; top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
-  animation: shine 3s infinite;
-}
+.btn-shiny::after { content:""; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent); animation:shine 3s infinite; }
 @keyframes shine { 0%{left:-100%} 20%{left:100%} 100%{left:100%} }
-.btn-outline {
-  padding: 13px 28px; border: 1px solid var(--dorado);
-  border-radius: 40px; font-size: 17px;
-  font-family: 'Cormorant Garamond', serif; font-weight: 600;
-  cursor: pointer; background: transparent; color: var(--dorado-suave);
-  transition: all 0.3s ease;
-}
-.btn-outline:hover { background: rgba(198,168,91,0.15); transform: scale(1.05); }
-.gallery-section { max-width: 1100px; margin: 0 auto 80px; padding: 0 15px; }
+.btn-outline { padding:13px 28px; border:1px solid var(--dorado); border-radius:40px; font-size:17px; font-family:'Cormorant Garamond',serif; font-weight:600; cursor:pointer; background:transparent; color:var(--dorado-suave); transition:all .3s; }
+.btn-outline:hover { background:rgba(198,168,91,.15); transform:scale(1.05); }
+.btn-danger { padding:6px 14px; border:1px solid #e05555; border-radius:20px; font-size:13px; font-family:'Cormorant Garamond',serif; cursor:pointer; background:rgba(224,85,85,.15); color:#ff9090; transition:all .2s; }
+.btn-danger:hover { background:rgba(224,85,85,.35); }
+
+/* GALERÍA */
+.gallery-section { max-width: 1100px; margin: 0 auto 60px; padding: 0 15px; }
 .gallery-header { margin-bottom: 30px; }
-.gallery-header h2 {
-  font-family: 'Great Vibes', cursive; font-size: 50px;
-  color: var(--dorado); font-weight: 400; margin-bottom: 6px;
-}
-.gallery-header p { font-size: 17px; opacity: 0.7; }
-.gallery-count {
-  display: inline-block;
-  background: rgba(198,168,91,0.15); border: 1px solid var(--dorado);
-  border-radius: 20px; padding: 4px 16px;
-  font-size: 15px; color: var(--dorado-suave); margin-top: 8px;
-}
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 14px;
-}
+.gallery-header h2 { font-family: 'Great Vibes', cursive; font-size: 50px; color: var(--dorado); font-weight: 400; margin-bottom: 6px; }
+.gallery-header p { font-size: 17px; opacity: .7; }
+.gallery-count { display: inline-block; background: rgba(198,168,91,.15); border: 1px solid var(--dorado); border-radius: 20px; padding: 4px 16px; font-size: 15px; color: var(--dorado-suave); margin-top: 8px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 14px; }
+
 .photo-item {
   position: relative; border-radius: 16px; overflow: hidden;
-  border: 1px solid rgba(198,168,91,0.3); aspect-ratio: 1;
-  cursor: pointer; background: rgba(0,0,0,0.4);
-  transition: all 0.3s ease; animation: fadeInPhoto 0.5s ease forwards;
+  border: 1px solid rgba(198,168,91,.3); aspect-ratio: 1;
+  background: rgba(0,0,0,.4); transition: all .3s;
+  animation: fadeInPhoto .5s ease forwards;
 }
-@keyframes fadeInPhoto { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
-.photo-item:hover {
-  border-color: var(--dorado); transform: scale(1.03);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6); z-index: 2;
-}
-.photo-item img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 0.4s ease;
-}
+@keyframes fadeInPhoto { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+.photo-item:hover { border-color: var(--dorado); transform: scale(1.03); box-shadow: 0 8px 30px rgba(0,0,0,.6); z-index: 2; }
+.photo-item img { width:100%; height:100%; object-fit:cover; display:block; cursor:pointer; transition:transform .4s; }
 .photo-item:hover img { transform: scale(1.08); }
-.gallery-empty {
-  grid-column: 1 / -1; padding: 60px 20px;
-  font-size: 20px; opacity: 0.6; line-height: 1.8;
+
+/* Botón eliminar sobre la foto */
+.photo-delete {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,.7); border: 1px solid #e05555;
+  color: #ff9090; border-radius: 50%;
+  width: 30px; height: 30px; font-size: 14px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .2s;
+  z-index: 5;
 }
-.spinner {
-  display: inline-block; width: 36px; height: 36px;
-  border: 3px solid rgba(198,168,91,0.2); border-top-color: var(--dorado);
-  border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 14px;
-}
+.photo-item:hover .photo-delete { opacity: 1; }
+.photo-delete:hover { background: rgba(224,85,85,.5); }
+
+.gallery-empty { grid-column:1/-1; padding:60px 20px; font-size:20px; opacity:.6; line-height:1.8; }
+.spinner { display:inline-block; width:36px; height:36px; border:3px solid rgba(198,168,91,.2); border-top-color:var(--dorado); border-radius:50%; animation:spin .8s linear infinite; margin-bottom:14px; }
 @keyframes spin { to{transform:rotate(360deg)} }
+
+/* LIGHTBOX */
 .lightbox {
   display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.92); z-index: 1000;
+  background: rgba(0,0,0,.95); z-index: 1000;
   justify-content: center; align-items: center;
-  padding: 20px; backdrop-filter: blur(6px);
+  padding: 20px; backdrop-filter: blur(8px);
 }
 .lightbox.open { display: flex; }
+.lightbox-img-wrap { position: relative; max-width: 90vw; max-height: 88vh; }
 .lightbox img {
-  max-width: 90vw; max-height: 88vh; border-radius: 12px;
-  border: 1px solid var(--dorado); box-shadow: 0 0 60px rgba(0,0,0,0.9);
-  animation: zoomIn 0.3s ease;
+  max-width: 90vw; max-height: 85vh;
+  border-radius: 12px; border: 1px solid var(--dorado);
+  box-shadow: 0 0 60px rgba(0,0,0,.9);
+  display: block; object-fit: contain;
+  animation: zoomIn .3s ease;
 }
-@keyframes zoomIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
-.lightbox-close {
-  position: absolute; top: 20px; right: 26px; font-size: 32px;
-  color: var(--dorado-suave); cursor: pointer; background: none; border: none;
-  transition: transform 0.2s;
+@keyframes zoomIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.lightbox-close { position:absolute; top:20px; right:26px; font-size:32px; color:var(--dorado-suave); cursor:pointer; background:none; border:none; transition:transform .2s; z-index:10; }
+.lightbox-close:hover { transform:scale(1.2) rotate(90deg); }
+.lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.5); border:1px solid var(--dorado); color:var(--dorado-suave); font-size:26px; width:48px; height:48px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+.lightbox-nav:hover { background:rgba(198,168,91,.25); }
+.lightbox-prev { left:14px; }
+.lightbox-next { right:14px; }
+
+/* COMENTARIOS */
+.comments-list { margin-top: 24px; text-align: left; display: flex; flex-direction: column; gap: 14px; }
+.comment-item {
+  background: rgba(198,168,91,.08); border: 1px solid rgba(198,168,91,.25);
+  border-radius: 16px; padding: 16px 18px;
 }
-.lightbox-close:hover { transform: scale(1.2) rotate(90deg); }
-.lightbox-nav {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  background: rgba(0,0,0,0.5); border: 1px solid var(--dorado);
-  color: var(--dorado-suave); font-size: 26px;
-  width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
+.comment-nombre { font-size: 18px; font-weight: 600; color: var(--dorado); margin-bottom: 4px; }
+.comment-mensaje { font-size: 17px; line-height: 1.6; opacity: .9; }
+.comment-fecha { font-size: 13px; opacity: .5; margin-top: 6px; }
+
+.comment-form { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+.comment-form input,
+.comment-form textarea {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(198,168,91,.4);
+  border-radius: 12px; padding: 12px 16px;
+  color: var(--texto-claro); font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; outline: none; resize: none;
+  transition: border-color .2s;
 }
-.lightbox-nav:hover { background: rgba(198,168,91,0.25); }
-.lightbox-prev { left: 14px; }
-.lightbox-next { right: 14px; }
-.toast {
-  position: fixed; bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--card-bg); border: 2px solid var(--dorado);
-  border-radius: 50px; padding: 12px 26px;
-  color: var(--dorado-suave); font-size: 16px;
-  backdrop-filter: blur(10px); z-index: 2000;
-  opacity: 0; transition: all 0.35s ease; pointer-events: none;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.5); white-space: nowrap;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.closing {
-  max-width: 500px; margin: 0 auto 80px; padding: 40px 30px;
-  border-radius: 25px; border: 1px solid var(--dorado);
-  background: var(--card-bg); backdrop-filter: blur(8px);
-  font-size: 21px; line-height: 1.8; color: var(--dorado-suave);
-}
-@media (max-width: 600px) {
-  .hero { padding: 40px 16px 20px; }
-  .upload-card { padding: 28px 18px; }
-  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-  .lightbox-nav { display: none; }
-  .btn-row { flex-direction: column; align-items: center; }
+.comment-form input:focus,
+.comment-form textarea:focus { border-color: var(--dorado); }
+.comment-form input::placeholder,
+.comment-form textarea::placeholder { opacity: .45; }
+
+/* TOAST */
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--card-bg); border:2px solid var(--dorado); border-radius:50px; padding:12px 26px; color:var(--dorado-suave); font-size:16px; backdrop-filter:blur(10px); z-index:2000; opacity:0; transition:all .35s; pointer-events:none; box-shadow:0 4px 24px rgba(0,0,0,.5); white-space:nowrap; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CIERRE */
+.closing { max-width:500px; margin:0 auto 80px; padding:40px 30px; border-radius:25px; border:1px solid var(--dorado); background:var(--card-bg); backdrop-filter:blur(8px); font-size:21px; line-height:1.8; color:var(--dorado-suave); }
+
+@media(max-width:600px) {
+  .hero { padding:40px 16px 20px; }
+  .card { padding:28px 18px; }
+  .gallery-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
+  .lightbox-nav { display:none; }
+  .btn-row { flex-direction:column; align-items:center; }
+  .toast { width:90%; text-align:center; white-space:normal; }
 }
 </style>
 </head>
 <body>
 
+<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lbClose">✕</button>
   <button class="lightbox-nav lightbox-prev" id="lbPrev">‹</button>
-  <img id="lbImg" src="" alt="">
+  <img id="lbImg" src="" alt="Foto ampliada">
   <button class="lightbox-nav lightbox-next" id="lbNext">›</button>
 </div>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- HERO -->
 <div class="hero">
   <div class="hero-subtitle">28 · Marzo · 2026</div>
   <div class="hero-title">Javi & Irli</div>
@@ -237,26 +201,26 @@ body::before {
   <div class="divider"></div>
 </div>
 
-<div class="upload-card">
+<!-- SUBIR FOTOS -->
+<div class="card">
   <h2>Sube tus fotos</h2>
-  <p>Puedes subir varias fotos a la vez.<br>Las verás aparecer en la galería de inmediato.</p>
+  <p>Puedes subir varias fotos a la vez.<br>Las verás aparecer en la galería al instante.</p>
   <div class="drop-zone" id="dropZone">
     <span class="icon">📸</span>
     <p id="dropText">Arrastra tus fotos aquí<br><small style="opacity:.6">o haz clic para seleccionar</small></p>
     <input type="file" id="fileInput" accept="image/*" multiple>
   </div>
   <div class="progress-wrap" id="progressWrap">
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressFill"></div>
-    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
     <div class="progress-text" id="progressText">Subiendo...</div>
   </div>
   <div class="btn-row">
-    <button class="btn-shiny" id="uploadBtn">📤 Subir fotos seleccionadas</button>
+    <button class="btn-shiny" id="uploadBtn">📤 Subir fotos</button>
     <button class="btn-outline" id="driveBtn">📁 Ver en Google Drive</button>
   </div>
 </div>
 
+<!-- GALERÍA -->
 <div class="gallery-section">
   <div class="gallery-header">
     <h2>Álbum compartido</h2>
@@ -264,20 +228,35 @@ body::before {
     <span class="gallery-count" id="photoCount">Cargando...</span>
   </div>
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-empty">
-      <div class="spinner"></div><br>Cargando fotos...
-    </div>
+    <div class="gallery-empty"><div class="spinner"></div><br>Cargando fotos...</div>
   </div>
 </div>
 
+<!-- PIZARRÓN DE COMENTARIOS -->
+<div class="card" style="max-width:620px">
+  <h2>Déjanos un mensaje 💌</h2>
+  <p>Escríbenos tus buenos deseos, anécdotas o simplemente di hola.</p>
+  <div class="comment-form">
+    <input type="text" id="commentNombre" placeholder="Tu nombre" maxlength="60">
+    <textarea id="commentMensaje" placeholder="Escribe tu mensaje aquí..." rows="4" maxlength="400"></textarea>
+    <button class="btn-shiny" id="sendCommentBtn" style="align-self:center">✉️ Enviar mensaje</button>
+  </div>
+  <div class="comments-list" id="commentsList">
+    <div style="text-align:center;opacity:.5;font-size:17px;padding:20px 0"><div class="spinner"></div><br>Cargando mensajes...</div>
+  </div>
+</div>
+
+<!-- CIERRE -->
 <div class="closing">
   Gracias por compartir estos momentos con nosotros.<br><br>
   Con todo nuestro amor,<br>Javi & Irli 💍✨
 </div>
 
 <script>
-// ⚠️ SOLO CAMBIA ESTA URL por la de tu Apps Script
-const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbwdbRnO9v7BMLDvlSHA9cTlohGxgGaEWk2hO9qVL2C75NDyeXAd0PF8-oaoZhkYU9c/exec';
+// =====================================================
+// ⚠️ CAMBIA SOLO ESTA LÍNEA con tu URL del Apps Script
+// =====================================================
+const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzqV1O8w57WDjzUgoYL4PMrc5aFaH5mYKtTmMxmmIl2p-_LBvJ40VPHIHCbTwSbqB1KWg/exec';
 const DRIVE_FOLDER = 'https://drive.google.com/drive/folders/1wLtKSW-cZz9G1uvV9KGNHgFvIvEcvi0D';
 
 let selectedFiles  = [];
@@ -292,6 +271,28 @@ function showToast(msg, duration = 4000) {
   setTimeout(() => t.classList.remove('show'), duration);
 }
 
+/* ── JSONP helper ── */
+function jsonpFetch(url) {
+  return new Promise((resolve, reject) => {
+    const cbName  = 'cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(() => {
+      delete window[cbName];
+      reject(new Error('Timeout'));
+    }, 12000);
+
+    window[cbName] = data => {
+      clearTimeout(timeout);
+      delete window[cbName];
+      resolve(data);
+    };
+
+    const s   = document.createElement('script');
+    s.src     = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    s.onerror = () => { clearTimeout(timeout); delete window[cbName]; reject(new Error('Script error')); };
+    document.head.appendChild(s);
+  });
+}
+
 /* ── DRAG & DROP ── */
 const dropZone  = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
@@ -299,87 +300,68 @@ const dropText  = document.getElementById('dropText');
 
 dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
-fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+dropZone.addEventListener('drop', e  => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+fileInput.addEventListener('change',  ()  => handleFiles(fileInput.files));
 
 function handleFiles(files) {
   selectedFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
   if (!selectedFiles.length) { showToast('⚠️ Solo se aceptan imágenes.'); return; }
   showToast(`✅ ${selectedFiles.length} foto(s) lista(s) para subir`);
-  dropText.innerHTML = `${selectedFiles.length} foto(s) seleccionada(s)<br><small style="opacity:.6">Presiona "Subir fotos" para continuar</small>`;
+  dropText.innerHTML = `<strong>${selectedFiles.length} foto(s) seleccionada(s)</strong><br><small style="opacity:.6">Presiona "Subir fotos" para continuar</small>`;
 }
 
 /* ── SUBIR FOTOS ── */
 document.getElementById('uploadBtn').addEventListener('click', async () => {
   if (!selectedFiles.length) { showToast('📸 Primero selecciona al menos una foto'); return; }
 
-  const progressWrap = document.getElementById('progressWrap');
-  const progressFill = document.getElementById('progressFill');
-  const progressText = document.getElementById('progressText');
-  progressWrap.style.display = 'block';
+  const pw = document.getElementById('progressWrap');
+  const pf = document.getElementById('progressFill');
+  const pt = document.getElementById('progressText');
+  pw.style.display = 'block';
 
   let uploaded = 0;
   for (const file of selectedFiles) {
-    progressText.textContent = `Subiendo ${uploaded + 1} de ${selectedFiles.length}...`;
-    progressFill.style.width  = `${(uploaded / selectedFiles.length) * 100}%`;
+    pt.textContent    = `Subiendo ${uploaded + 1} de ${selectedFiles.length}...`;
+    pf.style.width    = `${(uploaded / selectedFiles.length) * 100}%`;
     try {
       const base64 = await fileToBase64(file);
-      // no-cors evita el bloqueo CORS en el POST
       await fetch(SCRIPT_URL, {
         method : 'POST',
         mode   : 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body   : JSON.stringify({ image: base64, fileName: file.name, mimeType: file.type })
+        body   : JSON.stringify({ action: 'upload', image: base64, fileName: file.name, mimeType: file.type })
       });
       uploaded++;
     } catch(err) { console.error('Error subiendo:', file.name, err); }
   }
 
-  progressFill.style.width  = '100%';
-  progressText.textContent  = `✅ ¡${uploaded} foto(s) subidas con éxito!`;
+  pf.style.width  = '100%';
+  pt.textContent  = `✅ ¡${uploaded} foto(s) subidas con éxito!`;
   showToast(`🎉 ¡${uploaded} foto(s) añadidas al álbum!`);
-
   selectedFiles = [];
   fileInput.value = '';
   dropText.innerHTML = `Arrastra tus fotos aquí<br><small style="opacity:.6">o haz clic para seleccionar</small>`;
 
-  // Esperamos 4s para que Drive procese y recargamos la galería
-  setTimeout(() => {
-    progressWrap.style.display = 'none';
-    progressFill.style.width   = '0%';
-    loadGallery();
-  }, 4000);
+  setTimeout(() => { pw.style.display = 'none'; pf.style.width = '0%'; loadGallery(); }, 4000);
 });
 
 function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
+  return new Promise((res, rej) => {
     const r = new FileReader();
-    r.onload  = () => resolve(r.result);
-    r.onerror = reject;
+    r.onload  = () => res(r.result);
+    r.onerror = rej;
     r.readAsDataURL(file);
   });
 }
 
-/* ── GALERÍA CON JSONP (evita CORS en GET) ── */
-function loadGallery() {
+/* ── GALERÍA ── */
+async function loadGallery() {
   const grid  = document.getElementById('galleryGrid');
   const count = document.getElementById('photoCount');
 
-  // Nombre único para el callback
-  const cbName = 'gc_' + Date.now();
-
-  // Timeout por si el script no responde
-  const timeout = setTimeout(() => {
-    delete window[cbName];
-    count.textContent = 'Error al cargar';
-    grid.innerHTML = `<div class="gallery-empty">⚠️ No se pudo conectar con el servidor.<br>Verifica que el Apps Script esté desplegado correctamente.</div>`;
-  }, 10000);
-
-  window[cbName] = function(data) {
-    clearTimeout(timeout);
-    delete window[cbName];
-
-    allPhotos = data.photos || [];
+  try {
+    const data = await jsonpFetch(`${SCRIPT_URL}?action=list`);
+    allPhotos  = data.photos || [];
     count.textContent = `${allPhotos.length} foto${allPhotos.length !== 1 ? 's' : ''}`;
 
     if (!allPhotos.length) {
@@ -391,42 +373,127 @@ function loadGallery() {
     allPhotos.forEach((photo, i) => {
       const item = document.createElement('div');
       item.className = 'photo-item';
-      item.style.animationDelay = `${i * 0.05}s`;
-      item.innerHTML = `<img src="${photo.url}" alt="Foto ${i+1}" loading="lazy">`;
-      item.addEventListener('click', () => openLightbox(i));
+      item.style.animationDelay = `${i * 0.04}s`;
+      item.innerHTML = `
+        <img src="${photo.thumb}" alt="Foto ${i+1}" loading="lazy" data-index="${i}">
+        <button class="photo-delete" title="Eliminar foto" data-id="${photo.id}">🗑</button>
+      `;
+      // Click en imagen → lightbox
+      item.querySelector('img').addEventListener('click', () => openLightbox(i));
+      // Click en eliminar
+      item.querySelector('.photo-delete').addEventListener('click', e => {
+        e.stopPropagation();
+        deletePhoto(photo.id, item);
+      });
       grid.appendChild(item);
     });
-  };
 
-  // Inyectar script JSONP
-  const s = document.createElement('script');
-  s.src = `${SCRIPT_URL}?action=list&callback=${cbName}`;
-  s.onerror = () => {
-    clearTimeout(timeout);
-    delete window[cbName];
+  } catch(err) {
     count.textContent = 'Error al cargar';
-    grid.innerHTML = `<div class="gallery-empty">⚠️ No se pudo cargar la galería.</div>`;
-  };
-  document.head.appendChild(s);
+    grid.innerHTML = `<div class="gallery-empty">⚠️ No se pudo cargar la galería.<br>Verifica que el Apps Script esté configurado.</div>`;
+  }
+}
+
+/* ── ELIMINAR FOTO ── */
+async function deletePhoto(fileId, itemEl) {
+  if (!confirm('¿Eliminar esta foto del álbum?')) return;
+  itemEl.style.opacity = '0.4';
+  try {
+    await jsonpFetch(`${SCRIPT_URL}?action=delete&fileId=${fileId}`);
+    itemEl.remove();
+    allPhotos = allPhotos.filter(p => p.id !== fileId);
+    document.getElementById('photoCount').textContent = `${allPhotos.length} foto${allPhotos.length !== 1 ? 's' : ''}`;
+    showToast('🗑 Foto eliminada');
+  } catch(err) {
+    itemEl.style.opacity = '1';
+    showToast('⚠️ No se pudo eliminar la foto');
+  }
 }
 
 /* ── LIGHTBOX ── */
 function openLightbox(i) {
   currentLbIndex = i;
-  document.getElementById('lbImg').src = allPhotos[i].fullUrl || allPhotos[i].url;
+  const img = document.getElementById('lbImg');
+  // Usamos la URL de mayor resolución para el lightbox
+  img.src = allPhotos[i].url;
   document.getElementById('lightbox').classList.add('open');
 }
+
 document.getElementById('lbClose').addEventListener('click', () => document.getElementById('lightbox').classList.remove('open'));
 document.getElementById('lbPrev').addEventListener('click', () => {
   currentLbIndex = (currentLbIndex - 1 + allPhotos.length) % allPhotos.length;
-  document.getElementById('lbImg').src = allPhotos[currentLbIndex].fullUrl || allPhotos[currentLbIndex].url;
+  document.getElementById('lbImg').src = allPhotos[currentLbIndex].url;
 });
 document.getElementById('lbNext').addEventListener('click', () => {
   currentLbIndex = (currentLbIndex + 1) % allPhotos.length;
-  document.getElementById('lbImg').src = allPhotos[currentLbIndex].fullUrl || allPhotos[currentLbIndex].url;
+  document.getElementById('lbImg').src = allPhotos[currentLbIndex].url;
 });
 document.getElementById('lightbox').addEventListener('click', e => {
   if (e.target === document.getElementById('lightbox')) document.getElementById('lightbox').classList.remove('open');
+});
+// Navegación con teclado
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft')  document.getElementById('lbPrev').click();
+  if (e.key === 'ArrowRight') document.getElementById('lbNext').click();
+  if (e.key === 'Escape')     document.getElementById('lightbox').classList.remove('open');
+});
+
+/* ── COMENTARIOS ── */
+async function loadComments() {
+  const list = document.getElementById('commentsList');
+  try {
+    const data     = await jsonpFetch(`${SCRIPT_URL}?action=get_comments`);
+    const comments = data.comments || [];
+
+    if (!comments.length) {
+      list.innerHTML = `<div style="text-align:center;opacity:.5;font-size:17px;padding:16px 0">Aún no hay mensajes. ¡Sé el primero! 💌</div>`;
+      return;
+    }
+
+    list.innerHTML = '';
+    comments.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'comment-item';
+      el.innerHTML = `
+        <div class="comment-nombre">💛 ${c.nombre}</div>
+        <div class="comment-mensaje">${c.mensaje}</div>
+        <div class="comment-fecha">${c.fecha}</div>
+      `;
+      list.appendChild(el);
+    });
+  } catch(err) {
+    list.innerHTML = `<div style="text-align:center;opacity:.5;font-size:16px;padding:16px 0">No se pudieron cargar los mensajes.</div>`;
+  }
+}
+
+document.getElementById('sendCommentBtn').addEventListener('click', async () => {
+  const nombre  = document.getElementById('commentNombre').value.trim();
+  const mensaje = document.getElementById('commentMensaje').value.trim();
+
+  if (!nombre)  { showToast('✏️ Por favor escribe tu nombre'); return; }
+  if (!mensaje) { showToast('✏️ Por favor escribe un mensaje'); return; }
+
+  document.getElementById('sendCommentBtn').textContent = 'Enviando...';
+  document.getElementById('sendCommentBtn').disabled    = true;
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method : 'POST',
+      mode   : 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({ action: 'add_comment', nombre, mensaje })
+    });
+    showToast('💌 ¡Mensaje enviado con amor!');
+    document.getElementById('commentNombre').value  = '';
+    document.getElementById('commentMensaje').value = '';
+    setTimeout(loadComments, 2000);
+  } catch(err) {
+    showToast('⚠️ No se pudo enviar el mensaje');
+  }
+
+  document.getElementById('sendCommentBtn').textContent = '✉️ Enviar mensaje';
+  document.getElementById('sendCommentBtn').disabled    = false;
 });
 
 /* ── DRIVE ── */
@@ -434,7 +501,9 @@ document.getElementById('driveBtn').addEventListener('click', () => window.open(
 
 /* ── INICIO ── */
 loadGallery();
-setInterval(loadGallery, 30000);
+loadComments();
+setInterval(loadGallery,  30000);
+setInterval(loadComments, 45000);
 </script>
 </body>
 </html>
