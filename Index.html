@@ -829,7 +829,8 @@ function updateCountdown() {
   const now = new Date().getTime();
   const distance = weddingDate - now;
   if (distance <= 0) {
-    countdownEl.innerHTML = "¡Hoy es el gran día! 💍✨";
+   countdownEl.innerHTML = "¡Hoy es el gran día! 💍✨";
+setTimeout(() => { window.location.href = "album.html"; }, 3000);
     return;
   }
   const days = Math.floor(distance / (1000 * 60 * 60 * 24));
